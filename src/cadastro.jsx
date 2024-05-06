@@ -1,5 +1,5 @@
-// Cadastro.js
 import React, { useState } from "react";
+import "./Cadastro.css";
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -18,7 +18,7 @@ const Cadastro = () => {
   };
 
   return (
-    <div>
+    <div className="input-container">
       <h2>Cadastro</h2>
       <input
         type="text"

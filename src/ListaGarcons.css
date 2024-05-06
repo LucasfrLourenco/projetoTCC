@@ -8,32 +8,47 @@ header {
 
 .garcons-container {
   display: flex;
-  flex-direction: row; /* Para listar os garçons na horizontal */
+  flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha quando não couberem mais */
   justify-content: center;
 }
 
 .garcon-card {
-  display: flex;
-  flex-direction: column;
+  width: 300px; /* Definindo uma largura fixa para os cards */
+  margin: 20px;
   padding: 20px;
   border: 1px solid #ccc;
-  margin-right: 20px;
-  max-width: 25%;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adicionando uma sombra suave */
 }
 
 .garcon-info {
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
-/* .garcon-info p:last-child { */
-/* overflow: hidden; Oculta qualquer conteúdo que exceda o tamanho do contêiner */
-/* white-space: nowrap; Impede que o texto quebre em várias linhas */
-/* text-overflow: ellipsis; Adiciona reticências (...) para indicar que há mais conteúdo além do contêiner */
-/* } */
+.garcon-info h2 {
+  margin-bottom: 5px;
+}
+
+.garcon-info p {
+  margin: 5px 0;
+}
 
 .garcon-description {
-  flex: 1; /* Faz a descrição ocupar todo o espaço disponível */
-  overflow: hidden; /* Oculta qualquer conteúdo que exceda o tamanho do contêiner */
-  border: 1px solid #ccc;
-  padding: 10px 10px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 12; /* Limitando a descrição linhas */
+  -webkit-box-orient: vertical;
+  margin-top: auto; /* Alinhando a descrição ao final do card */
+}
+
+.garcon-rating {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #f39c12; /* Cor amarela para as estrelinhas */
+}
+
+.garcon-rating span {
+  font-size: 18px;
 }
