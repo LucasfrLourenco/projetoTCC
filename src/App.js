@@ -10,7 +10,9 @@ function App() {
     <Router>
       <div className="App">
         <header className="App-header">
-          <h1>Garçons Disponíveis</h1>
+          <h1>
+            <Link to="/">Garçonline</Link>
+          </h1>
           <nav className="header-nav">
             <ul>
               <li>
