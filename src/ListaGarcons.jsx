@@ -28,7 +28,7 @@ const ListaGarcons = () => {
     {
       id: 3,
       nome: "Pedro",
-      fotoPerfil: "./images/dog1.jpg", // Caminho para a foto de perfil do usuário
+      fotoPerfil: "/images/dog.jpg", // Caminho para a foto de perfil do usuário
       descricao:
         "Pedro possui mais de 5 anos de experiência como garçom em diversos tipos de estabelecimentos, desde restaurantes familiares a eventos de grande porte. Sua habilidade em lidar com clientes e sua dedicação ao trabalho o tornam um profissional altamente qualificado..",
       idade: 32,
@@ -57,7 +57,7 @@ const ListaGarcons = () => {
           <div key={garcom.id} className="garcon-card">
             <div className="garcon-info">
               <div className="profile-picture">
-                <img src={garcom.fotoPerfil} alt="Foto de Perfil" />
+                <img src={garcom.fotoPerfil} alt="Foto" />
               </div>
               <div>
                 <h2>{garcom.nome}</h2>
