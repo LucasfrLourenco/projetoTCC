@@ -1,0 +1,39 @@
+/* ListaGarcons.css */
+
+header {
+  background-color: #ffffff;
+  border: 5px solid black;
+  margin-bottom: 30px;
+}
+
+.garcons-container {
+  display: flex;
+  flex-direction: row; /* Para listar os garçons na horizontal */
+  justify-content: center;
+}
+
+.garcon-card {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  border: 1px solid #ccc;
+  margin-right: 20px;
+  max-width: 25%;
+}
+
+.garcon-info {
+  margin-bottom: 10px;
+}
+
+/* .garcon-info p:last-child { */
+/* overflow: hidden; Oculta qualquer conteúdo que exceda o tamanho do contêiner */
+/* white-space: nowrap; Impede que o texto quebre em várias linhas */
+/* text-overflow: ellipsis; Adiciona reticências (...) para indicar que há mais conteúdo além do contêiner */
+/* } */
+
+.garcon-description {
+  flex: 1; /* Faz a descrição ocupar todo o espaço disponível */
+  overflow: hidden; /* Oculta qualquer conteúdo que exceda o tamanho do contêiner */
+  border: 1px solid #ccc;
+  padding: 10px 10px;
+}
