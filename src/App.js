@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch, BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import ListaGarcons from "./ListaGarcons";
 import Cadastro from "./cadastro";
 import Login from "./login";
@@ -9,13 +9,13 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <Switch>
-          <Route path="/cadastro" component={Cadastro} />
-          <Route path="/login" component={Login} />
-          <Route path="/" exact component={ListaGarcons} />
+        <Routes>
+          <Route path="/cadastro" element={<Cadastro />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<ListaGarcons />} />
           {/* Adicione mais rotas conforme necessário */}
-          {/* Por exemplo: <Route path="/outra-rota" component={OutroComponente} /> */}
-        </Switch>
+          {/* Por exemplo: <Route path="/outra-rota" element={<OutroComponente />} /> */}
+        </Routes>
       </div>
     </Router>
   );
