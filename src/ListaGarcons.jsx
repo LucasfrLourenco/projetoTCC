@@ -34,23 +34,6 @@ const ListaGarcons = () => {
 
   return (
     <div>
-      <header>
-        <h1>Garçons Disponíveis</h1>
-        <nav className="header-nav">
-          <ul>
-            <li>
-              <a href="#">Procure Trabalhos</a>
-            </li>
-            <li>
-              <a href="#">Procure Garçons</a>
-            </li>
-          </ul>
-          <div className="header-actions">
-            <a href="#">Login</a>
-            <a href="#">Cadastrar-se</a>
-          </div>
-        </nav>
-      </header>
       <div className="garcons-container">
         {garcons.map((garcom) => (
           <div key={garcom.id} className="garcon-card">
