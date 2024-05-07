@@ -1,11 +1,15 @@
 const express = require("express");
 const mysql = require("mysql");
+const cors = require("cors");
 
 const app = express();
 const PORT = 3001;
 
 // Middleware para analisar o corpo das solicitações POST
 app.use(express.json());
+
+// Use o middleware cors na sua aplicação Express
+app.use(cors());
 
 const db = mysql.createConnection({
   host: "localhost",
