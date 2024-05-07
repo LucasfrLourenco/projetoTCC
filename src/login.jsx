@@ -1,18 +1,28 @@
 import React, { useState } from "react";
-import "./cadastro";
+import axios from "axios";
+
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
 
   const handleLogin = () => {
-    // Implemente a lógica de login aqui (comunicação com o backend)
-    console.log("Email:", email);
-    console.log("Senha:", senha);
+    axios
+      .post("http://localhost:3001/login", {
+        email,
+        senha,
+      })
+      .then((response) => {
+        console.log(response.data);
+        // Adicione aqui o código para redirecionar o usuário após o login, se necessário
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
     <div className="input-container">
-      <h2>Login</h2> {/* Adicione uma classe de contêiner para os inputs */}
+      <h2>Login</h2>
       <input
         className="input-field"
         type="email"

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "./Cadastro.css";
+import axios from "axios";
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -9,12 +9,21 @@ const Cadastro = () => {
   const [senha, setSenha] = useState("");
 
   const handleCadastro = () => {
-    // Implemente a lógica de cadastro aqui (comunicação com o backend)
-    console.log("Nome:", nome);
-    console.log("CPF/CNPJ:", cpfCnpj);
-    console.log("Telefone:", telefone);
-    console.log("Email:", email);
-    console.log("Senha:", senha);
+    axios
+      .post("http://localhost:3001/cadastro", {
+        nome,
+        cpfCnpj,
+        telefone,
+        email,
+        senha,
+      })
+      .then((response) => {
+        console.log(response.data);
+        // Adicione aqui o código para redirecionar o usuário após o cadastro, se necessário
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
