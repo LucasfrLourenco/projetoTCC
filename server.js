@@ -7,10 +7,7 @@ const jwt = require("jsonwebtoken");
 const app = express();
 const PORT = 3001;
 
-// Middleware para analisar o corpo das solicitações POST
 app.use(express.json());
-
-// Use o middleware cors na sua aplicação Express
 app.use(cors());
 
 const db = mysql.createConnection({
@@ -20,7 +17,6 @@ const db = mysql.createConnection({
   database: "bancotcc",
 });
 
-// Conectando ao banco de dados
 db.connect((err) => {
   if (err) {
     throw err;
@@ -28,12 +24,10 @@ db.connect((err) => {
   console.log("Conectado ao banco de dados MySQL");
 });
 
-// Rota para cadastrar usuário
 app.post("/cadastro", async (req, res) => {
   const { nome, cpfCnpj, telefone, email, senha } = req.body;
 
   try {
-    // Criptografando a senha
     const hashedSenha = await bcrypt.hash(senha, 10);
 
     const sql = `INSERT INTO usuarios (nome, cpfCnpj, telefone, email, senha) VALUES (?, ?, ?, ?, ?)`;
@@ -55,7 +49,6 @@ app.post("/cadastro", async (req, res) => {
   }
 });
 
-// Rota para realizar login
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -66,16 +59,48 @@ app.post("/login", async (req, res) => {
         res.status(500).send("Erro ao realizar login");
       } else {
         if (result.length > 0) {
-          // Verificando a senha criptografada
           const usuario = result[0];
           const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
 
           if (senhaCorreta) {
-            // Gerando token de autenticação
             const token = jwt.sign({ id: usuario.id }, "segredo", {
               expiresIn: "1h",
             });
-            res.status(200).json({ token });
+            res.status(200).json({ token, userId: usuario.id });
+          } else {
+            res.status(401).send("Senha incorreta");
+          }
+        } else {
+          res.status(404).send("Usuário não encontrado");
+        }
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Erro ao realizar login");
+  }
+});
+app.post("/login", async (req, res) => {
+  const { email, senha } = req.body;
+
+  try {
+    const sql = `SELECT * FROM usuarios WHERE email = ?`;
+    db.query(sql, [email], async (err, result) => {
+      if (err) {
+        res.status(500).send("Erro ao realizar login");
+      } else {
+        if (result.length > 0) {
+          const usuario = result[0];
+          const senhaCorreta = await bcrypt.compare(senha, usuario.senha);
+
+          if (senhaCorreta) {
+            const token = jwt.sign({ id: usuario.id }, "segredo", {
+              expiresIn: "1h",
+            });
+            res.status(200).json({ token, userId: usuario.id });
+            // Armazenando o token JWT e o ID do usuário no localStorage
+            localStorage.setItem("token", token);
+            localStorage.setItem("userId", usuario.id);
           } else {
             res.status(401).send("Senha incorreta");
           }
@@ -90,7 +115,6 @@ app.post("/login", async (req, res) => {
   }
 });
 
-// Middleware para verificar o token de autenticação
 function verificarToken(req, res, next) {
   const token = req.headers["authorization"];
 
@@ -107,10 +131,38 @@ function verificarToken(req, res, next) {
   });
 }
 
-// Rota para perfil do usuário
 app.get("/perfil", verificarToken, (req, res) => {
-  // Lógica para retornar o perfil do usuário
-  res.status(200).send("Página de perfil do usuário");
+  const userId = req.userId;
+
+  const sql = `SELECT * FROM usuarios WHERE id = ?`;
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send("Erro ao obter perfil do usuário");
+    } else {
+      const usuario = result[0];
+      res.status(200).json(usuario);
+    }
+  });
+});
+
+app.put("/perfil", verificarToken, (req, res) => {
+  const { telefone, senha, descricao, disponivel } = req.body;
+  const userId = req.userId;
+
+  const sql = `UPDATE usuarios SET telefone = ?, senha = ?, descricao = ?, disponivel = ? WHERE id = ?`;
+  db.query(
+    sql,
+    [telefone, senha, descricao, disponivel, userId],
+    (err, result) => {
+      if (err) {
+        console.error(err);
+        res.status(500).send("Erro ao atualizar perfil do usuário");
+      } else {
+        res.status(200).send("Perfil do usuário atualizado com sucesso");
+      }
+    }
+  );
 });
 
 app.listen(PORT, () => {

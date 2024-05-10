@@ -16,6 +16,10 @@ const Login = () => {
       .then((response) => {
         alert("Logado");
         setRedirect(true);
+        // Verificando se o token está sendo recebido corretamente
+        console.log("Token recebido:", response.data.token);
+        // Armazenando o token no localStorage
+        localStorage.setItem("token", response.data.token);
       })
       .catch((error) => {
         console.error(error);

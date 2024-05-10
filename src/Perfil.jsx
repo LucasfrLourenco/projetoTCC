@@ -10,6 +10,7 @@ const Perfil = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId"); // Obtendo o ID do usuário
     axios
       .get("http://localhost:3001/perfil", {
         headers: {
@@ -18,9 +19,9 @@ const Perfil = () => {
       })
       .then((response) => {
         setUsuario(response.data);
-        setTelefone(response.data.telefone);
-        setDescricao(response.data.descricao);
-        setDisponivel(response.data.disponivel);
+        setTelefone(response.data.telefone || "");
+        setDescricao(response.data.descricao || "");
+        setDisponivel(response.data.disponivel || false);
       })
       .catch((error) => {
         console.error(error);
@@ -29,6 +30,7 @@ const Perfil = () => {
 
   const handleUpdate = () => {
     const token = localStorage.getItem("token");
+    const userId = localStorage.getItem("userId"); // Obtendo o ID do usuário
     axios
       .put(
         "http://localhost:3001/perfil",
@@ -37,6 +39,7 @@ const Perfil = () => {
           senha,
           descricao,
           disponivel,
+          userId, // Incluindo o ID do usuário na requisição
         },
         {
           headers: {
