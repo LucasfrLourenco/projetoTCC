@@ -4,6 +4,7 @@ import ListaGarcons from "./ListaGarcons";
 import Login from "./login";
 import Cadastro from "./cadastro";
 import "./App.css";
+import Perfil from "./Perfil";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route path="/cadastro" element={<Cadastro />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/perfil" element={<Perfil />} />
           <Route path="/" element={<ListaGarcons />} />
           {/* Adicione mais rotas conforme necessário */}
           {/* Por exemplo: <Route path="/outra-rota" element={<OutroComponente />} /> */}

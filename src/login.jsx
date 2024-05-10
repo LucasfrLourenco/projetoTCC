@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import axios from "axios";
+import { Navigate } from "react-router-dom";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [redirect, setRedirect] = useState(false);
 
   const handleLogin = () => {
     axios
@@ -12,13 +14,18 @@ const Login = () => {
         senha,
       })
       .then((response) => {
-        console.log(response.data);
-        // Adicione aqui o código para redirecionar o usuário após o login, se necessário
+        alert("Logado");
+        setRedirect(true);
       })
       .catch((error) => {
         console.error(error);
+        alert("Senha ou email incorretos");
       });
   };
+
+  if (redirect) {
+    return <Navigate to="/perfil" />;
+  }
 
   return (
     <div className="input-container">
