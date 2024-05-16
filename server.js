@@ -10,6 +10,9 @@ const PORT = 3001;
 app.use(express.json());
 app.use(cors());
 
+//TESTE GIT HUB
+
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
