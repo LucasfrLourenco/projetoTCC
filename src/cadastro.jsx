@@ -7,6 +7,7 @@ const Cadastro = () => {
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [erroCpfCnpj, setErroCpfCnpj] = useState("");
 
   const handleCadastro = () => {
     axios
@@ -19,11 +20,30 @@ const Cadastro = () => {
       })
       .then((response) => {
         console.log(response.data);
-        // Adicione aqui o código para redirecionar o usuário após o cadastro, se necessário
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const validarCpfCnpj = (valor) => {
+    const cpfCnpj = valor.replace(/\D/g, '');
+    if (cpfCnpj.length <= 11) {
+      return cpfCnpj.length === 11;
+    } else {
+      return cpfCnpj.length === 14;
+    }
+  };
+
+  const handleChangeCpfCnpj = (e) => {
+    const valor = e.target.value;
+    setCpfCnpj(valor);
+
+    if (!validarCpfCnpj(valor)) {
+      setErroCpfCnpj('CPF ou CNPJ inválido');
+    } else {
+      setErroCpfCnpj('');
+    }
   };
 
   return (
@@ -36,11 +56,12 @@ const Cadastro = () => {
         onChange={(e) => setNome(e.target.value)}
       />
       <input
-        type="text"
+        type="number"
         placeholder="CPF ou CNPJ"
         value={cpfCnpj}
-        onChange={(e) => setCpfCnpj(e.target.value)}
+        onChange={handleChangeCpfCnpj}
       />
+      {erroCpfCnpj && <p style={{ color: 'red' }}>{erroCpfCnpj}</p>}
       <input
         type="tel"
         placeholder="Telefone"
