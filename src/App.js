@@ -26,14 +26,14 @@ function App() {
           </nav>
         </header>
 
-        <Routes>
-          <Route path="/cadastro" element={<Cadastro />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/perfil" element={<Perfil />} />
-          <Route path="/" element={<ListaGarcons />} />
-          {/* Adicione mais rotas conforme necessário */}
-          {/* Por exemplo: <Route path="/outra-rota" element={<OutroComponente />} /> */}
-        </Routes>
+        <main>
+          <Routes>
+            <Route path="/cadastro" element={<Cadastro />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/" element={<ListaGarcons />} />
+          </Routes>
+        </main>
       </div>
     </Router>
   );

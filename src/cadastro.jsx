@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import './Cadastro.css'; // Adicione essa linha para importar o arquivo CSS
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -48,39 +49,44 @@ const Cadastro = () => {
 
   return (
     <div className="input-container">
-      <h2>Cadastro</h2>
+      <h2>Cadastre-se</h2>
       <input
         type="text"
         placeholder="Nome"
         value={nome}
         onChange={(e) => setNome(e.target.value)}
+        className="input-field"
       />
       <input
         type="number"
         placeholder="CPF ou CNPJ"
         value={cpfCnpj}
         onChange={handleChangeCpfCnpj}
+        className="input-field"
       />
-      {erroCpfCnpj && <p style={{ color: 'red' }}>{erroCpfCnpj}</p>}
+      {erroCpfCnpj && <p className="error-message">{erroCpfCnpj}</p>}
       <input
         type="tel"
         placeholder="Telefone"
         value={telefone}
         onChange={(e) => setTelefone(e.target.value)}
+        className="input-field"
       />
       <input
         type="email"
         placeholder="Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
+        className="input-field"
       />
       <input
         type="password"
         placeholder="Senha"
         value={senha}
         onChange={(e) => setSenha(e.target.value)}
+        className="input-field"
       />
-      <button onClick={handleCadastro}>Cadastrar</button>
+      <button onClick={handleCadastro} className="submit-button">Cadastrar</button>
     </div>
   );
 };
