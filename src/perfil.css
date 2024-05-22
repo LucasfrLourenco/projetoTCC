@@ -15,6 +15,7 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     text-align: left;
     color: white;
+    opacity: 0.98;
 }
 
 .perfil-container h2 {
