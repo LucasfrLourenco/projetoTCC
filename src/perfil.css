@@ -1,0 +1,71 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: url('./images/fundo.jpg') no-repeat center center fixed;
+    background-size: cover;
+    overflow-x: hidden;
+}
+
+.perfil-container {
+    background-color: #532f06;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 500px;
+    margin: 100px auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    text-align: left;
+    color: white;
+}
+
+.perfil-container h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+.perfil-container p {
+    font-weight: bold;
+}
+
+.input-field,
+.textarea-field {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+.textarea-field {
+    height: 100px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+}
+
+.update-button {
+    background-color: #795d10;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+}
+
+.update-button:hover {
+    background-color: #c98a15;
+}
+
+.footer {
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    width: 100%;
+    text-align: center;
+    padding: 8px 0;
+    position: absolute;
+    bottom: 0;
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { Navigate } from "react-router-dom";
+import "./login.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -48,7 +49,7 @@ const Login = () => {
         value={senha}
         onChange={(e) => setSenha(e.target.value)}
       />
-      <button className="button" onClick={handleLogin}>
+      <button className="submit-button" onClick={handleLogin}>
         Entrar
       </button>
     </div>

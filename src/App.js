@@ -34,6 +34,9 @@ function App() {
             <Route path="/" element={<ListaGarcons />} />
           </Routes>
         </main>
+        <footer className="footer">
+          <p>&copy; 2024 Garçonline. Todos os direitos reservados.</p>
+        </footer>
       </div>
     </Router>
   );

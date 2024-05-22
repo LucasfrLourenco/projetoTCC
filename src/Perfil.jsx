@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./perfil.css";
 
 const Perfil = () => {
   const [usuario, setUsuario] = useState({});
@@ -10,7 +11,7 @@ const Perfil = () => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId"); // Obtendo o ID do usuário
+    const userId = localStorage.getItem("userId");
     axios
       .get("http://localhost:3001/perfil", {
         headers: {
@@ -30,7 +31,7 @@ const Perfil = () => {
 
   const handleUpdate = () => {
     const token = localStorage.getItem("token");
-    const userId = localStorage.getItem("userId"); // Obtendo o ID do usuário
+    const userId = localStorage.getItem("userId");
     axios
       .put(
         "http://localhost:3001/perfil",
@@ -39,7 +40,7 @@ const Perfil = () => {
           senha,
           descricao,
           disponivel,
-          userId, // Incluindo o ID do usuário na requisição
+          userId,
         },
         {
           headers: {
@@ -56,35 +57,43 @@ const Perfil = () => {
   };
 
   return (
-    <div>
-      <h2>Perfil do Usuário</h2>
-      <p>Nome: {usuario.nome}</p>
-      <input
-        type="text"
-        placeholder="Telefone"
-        value={telefone}
-        onChange={(e) => setTelefone(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="Nova Senha"
-        value={senha}
-        onChange={(e) => setSenha(e.target.value)}
-      />
-      <textarea
-        placeholder="Descrição"
-        value={descricao}
-        onChange={(e) => setDescricao(e.target.value)}
-      />
-      <label>
-        Disponível:
+    <div className="perfil-page">
+      <div className="perfil-container">
+        <h2>Perfil do Usuário</h2>
+        <p>Nome: {usuario.nome}</p>
         <input
-          type="checkbox"
-          checked={disponivel}
-          onChange={(e) => setDisponivel(e.target.checked)}
+          className="input-field"
+          type="text"
+          placeholder="Telefone"
+          value={telefone}
+          onChange={(e) => setTelefone(e.target.value)}
         />
-      </label>
-      <button onClick={handleUpdate}>Atualizar</button>
+        <input
+          className="input-field"
+          type="password"
+          placeholder="Nova Senha"
+          value={senha}
+          onChange={(e) => setSenha(e.target.value)}
+        />
+        <textarea
+          className="textarea-field"
+          placeholder="Descrição"
+          value={descricao}
+          onChange={(e) => setDescricao(e.target.value)}
+        />
+        <label className="checkbox-label">
+          Disponível:
+          <input
+            type="checkbox"
+            checked={disponivel}
+            onChange={(e) => setDisponivel(e.target.checked)}
+          />
+        </label>
+        <button className="update-button" onClick={handleUpdate}>
+          Atualizar
+        </button>
+      </div>
+
     </div>
   );
 };

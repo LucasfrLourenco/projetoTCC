@@ -16,9 +16,11 @@ header {
   width: 300px; /* Definindo uma largura fixa para os cards */
   margin: 20px;
   padding: 20px;
-  border: 1px solid #ccc;
+  border: 2px solid #000000;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adicionando uma sombra suave */
+  background-color: #ebebeb;
+  
 }
 
 .garcon-info {

@@ -7,7 +7,7 @@ body {
 }
 
 .App-header {
-  background-color: #0d70cc;
+  background-color: #532f06;
   color: white;
   padding: 10px 20px;
   margin-top: -10px;
@@ -18,18 +18,21 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  font-family: 'Times New Roman', Times, serif;
+  font-size: 17px;
 }
 
 .App-header h1 a {
-  color: white;
+  color: #ffffff;
   text-decoration: none;
   margin: 20px 100px;
+
 }
 
 .App-header h1 a:hover {
-  color: rgb(168, 159, 159);
-  text-decoration: underline;
-}
+  color: #c98a15;
+  outline: none;
+  }
 
 .header-nav ul {
   list-style-type: none;
@@ -47,11 +50,11 @@ body {
 }
 
 .header-nav ul li a {
-  color: white;
+  color: #ffffff;
   text-decoration: none;
 }
 
 .header-nav ul li a:hover {
-  color: white;
-  text-decoration: underline;
+  color: #c98a15;
+  outline: none;
 }
