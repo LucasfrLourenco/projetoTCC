@@ -3,8 +3,9 @@ import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import ListaGarcons from "./ListaGarcons";
 import Login from "./login";
 import Cadastro from "./cadastro";
-import "./App.css";
 import Perfil from "./Perfil";
+import PrivateRoute from "./PrivateRoute";
+import "./App.css";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
           <Routes>
             <Route path="/cadastro" element={<Cadastro />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/perfil" element={<PrivateRoute element={<Perfil />} />} />
             <Route path="/" element={<ListaGarcons />} />
           </Routes>
         </main>

@@ -13,9 +13,9 @@ const Perfil = () => {
     const token = localStorage.getItem("token");
     const userId = localStorage.getItem("userId");
     axios
-      .get("http://localhost:3001/perfil", {
+      .get(`http://localhost:3001/perfil/${userId}`, {
         headers: {
-          Authorization: token,
+          Authorization: `Bearer ${token}`,
         },
       })
       .then((response) => {
@@ -34,17 +34,16 @@ const Perfil = () => {
     const userId = localStorage.getItem("userId");
     axios
       .put(
-        "http://localhost:3001/perfil",
+        `http://localhost:3001/perfil/${userId}`,
         {
           telefone,
           senha,
           descricao,
           disponivel,
-          userId,
         },
         {
           headers: {
-            Authorization: token,
+            Authorization: `Bearer ${token}`,
           },
         }
       )
@@ -93,7 +92,6 @@ const Perfil = () => {
           Atualizar
         </button>
       </div>
-
     </div>
   );
 };
