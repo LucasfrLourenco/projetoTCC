@@ -1,7 +1,7 @@
 body {
   margin: 0;
   font-family: Arial, sans-serif;
-  background: url('./images/fundo.jpg') no-repeat center center fixed;
+  background: url("./images/fundo.jpg") no-repeat center center fixed;
   background-size: cover;
   overflow-x: hidden; /* Adicionado para remover a rolagem lateral */
 }
@@ -18,7 +18,7 @@ body {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Times New Roman', Times, serif;
+  font-family: "Times New Roman", Times, serif;
   font-size: 17px;
 }
 
@@ -26,13 +26,12 @@ body {
   color: #ffffff;
   text-decoration: none;
   margin: 20px 100px;
-
 }
 
 .App-header h1 a:hover {
   color: #c98a15;
   outline: none;
-  }
+}
 
 .header-nav ul {
   list-style-type: none;

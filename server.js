@@ -53,19 +53,25 @@ app.post("/cadastro", async (req, res) => {
       }
 
       if (result.length > 0) {
-        return res.status(400).send("Usuário já cadastrado com este email ou CPF/CNPJ");
+        return res
+          .status(400)
+          .send("Usuário já cadastrado com este email ou CPF/CNPJ");
       }
 
       const hashedSenha = await bcrypt.hash(senha, 10);
 
       const sqlInsert = `INSERT INTO usuarios (nome, cpfCnpj, telefone, email, senha) VALUES (?, ?, ?, ?, ?)`;
-      db.query(sqlInsert, [nome, cpfCnpj, telefone, email, hashedSenha], (err, result) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).send("Erro ao cadastrar usuário");
+      db.query(
+        sqlInsert,
+        [nome, cpfCnpj, telefone, email, hashedSenha],
+        (err, result) => {
+          if (err) {
+            console.error(err);
+            return res.status(500).send("Erro ao cadastrar usuário");
+          }
+          res.status(200).send("Usuário cadastrado com sucesso");
         }
-        res.status(200).send("Usuário cadastrado com sucesso");
-      });
+      );
     });
   } catch (error) {
     console.error(error);
@@ -128,8 +134,12 @@ app.put("/perfil", verificarToken, async (req, res) => {
 
   try {
     const hashedSenha = senha ? await bcrypt.hash(senha, 10) : undefined;
-    const sql = `UPDATE usuarios SET telefone = ?, ${hashedSenha ? "senha = ?, " : ""} descricao = ?, disponivel = ? WHERE id = ?`;
-    const params = hashedSenha ? [telefone, hashedSenha, descricao, disponivel, userId] : [telefone, descricao, disponivel, userId];
+    const sql = `UPDATE usuarios SET telefone = ?, ${
+      hashedSenha ? "senha = ?, " : ""
+    } descricao = ?, disponivel = ? WHERE id = ?`;
+    const params = hashedSenha
+      ? [telefone, hashedSenha, descricao, disponivel, userId]
+      : [telefone, descricao, disponivel, userId];
 
     db.query(sql, params, (err, result) => {
       if (err) {
@@ -146,4 +156,14 @@ app.put("/perfil", verificarToken, async (req, res) => {
 
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
+});
+app.get("/garcons", (req, res) => {
+  const sql = "SELECT * FROM usuarios";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).send("Erro ao obter a lista de garçons");
+    }
+    res.status(200).json(result);
+  });
 });

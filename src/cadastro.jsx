@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-import './Cadastro.css';
+import { useNavigate } from "react-router-dom";
+import "./Cadastro.css";
 
 const Cadastro = () => {
   const [nome, setNome] = useState("");
@@ -13,6 +14,7 @@ const Cadastro = () => {
   const [erroEmail, setErroEmail] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [erroCadastro, setErroCadastro] = useState("");
+  const navigate = useNavigate(); // Hook para redirecionamento
 
   const handleCadastro = () => {
     if (validateForm()) {
@@ -25,8 +27,8 @@ const Cadastro = () => {
           senha,
         })
         .then((response) => {
-          console.log(response.data);
           alert("Usuário cadastrado com sucesso");
+          navigate("/"); // Redireciona para a lista de garçons
         })
         .catch((error) => {
           console.error(error);
@@ -40,34 +42,34 @@ const Cadastro = () => {
 
     // CPF/CNPJ validation
     if (!validarCpfCnpj(cpfCnpj)) {
-      setErroCpfCnpj('CPF ou CNPJ inválido');
+      setErroCpfCnpj("CPF ou CNPJ inválido");
       valid = false;
     } else {
-      setErroCpfCnpj('');
+      setErroCpfCnpj("");
     }
 
     // Phone validation
     if (!/^\d{10,11}$/.test(telefone)) {
-      setErroTelefone('Telefone inválido');
+      setErroTelefone("Telefone inválido");
       valid = false;
     } else {
-      setErroTelefone('');
+      setErroTelefone("");
     }
 
     // Email validation
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
-      setErroEmail('Email inválido');
+      setErroEmail("Email inválido");
       valid = false;
     } else {
-      setErroEmail('');
+      setErroEmail("");
     }
 
     // Password validation
     if (senha.length < 6) {
-      setErroSenha('Senha deve ter no mínimo 6 caracteres');
+      setErroSenha("Senha deve ter no mínimo 6 caracteres");
       valid = false;
     } else {
-      setErroSenha('');
+      setErroSenha("");
     }
 
     return valid;
@@ -78,14 +80,14 @@ const Cadastro = () => {
     setCpfCnpj(valor);
 
     if (!validarCpfCnpj(valor)) {
-      setErroCpfCnpj('CPF ou CNPJ inválido');
+      setErroCpfCnpj("CPF ou CNPJ inválido");
     } else {
-      setErroCpfCnpj('');
+      setErroCpfCnpj("");
     }
   };
 
   const validarCpfCnpj = (valor) => {
-    const cpfCnpj = valor.replace(/\D/g, '');
+    const cpfCnpj = valor.replace(/\D/g, "");
     if (cpfCnpj.length <= 11) {
       return cpfCnpj.length === 11;
     } else {
@@ -135,7 +137,9 @@ const Cadastro = () => {
         className="input-field"
       />
       {erroSenha && <p className="error-message">{erroSenha}</p>}
-      <button onClick={handleCadastro} className="submit-button">Cadastrar</button>
+      <button onClick={handleCadastro} className="submit-button">
+        Cadastrar
+      </button>
       {erroCadastro && <p className="error-message">{erroCadastro}</p>}
     </div>
   );
