@@ -1,56 +1,38 @@
-/* ListaGarcons.css */
-
-header {
-  background-color: #ffffff;
-  border: 5px solid black;
-  margin-bottom: 30px;
-}
-
-.garcons-container {
-  display: flex;
-  flex-wrap: wrap; /* Permite que os cards quebrem para a próxima linha quando não couberem mais */
-  justify-content: center;
-}
-
-.garcon-card {
-  width: 300px; /* Definindo uma largura fixa para os cards */
-  margin: 20px;
+.trabalhadores-container {
+  max-width: 1200px;
+  margin: 0 auto;
   padding: 20px;
-  border: 2px solid #000000;
+}
+
+.trabalhadores-list {
+  display: flex;
+  flex-wrap: wrap;
+  list-style-type: none;
+  padding: 0;
+  margin: -10px;
+  margin-bottom: 40px;
+}
+
+.trabalhador-card {
+  background-color: #ffffff;
+  border: 3px solid #853100;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Adicionando uma sombra suave */
-  background-color: #ebebeb;
-  
+  padding: 45px;
+  margin: 10px;
+  width: calc(25% - 20px); /* Quatro cards por linha */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s;
 }
 
-.garcon-info {
-  margin-bottom: 15px;
+.trabalhador-card:hover {
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-.garcon-info h2 {
-  margin-bottom: 5px;
-}
-
-.garcon-info p {
+.trabalhador-card p {
   margin: 5px 0;
 }
 
-.garcon-description {
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 12; /* Limitando a descrição linhas */
-  -webkit-box-orient: vertical;
-  margin-top: auto; /* Alinhando a descrição ao final do card */
-}
-
-.garcon-rating {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  color: #f39c12; /* Cor amarela para as estrelinhas */
-}
-
-.garcon-rating span {
-  font-size: 18px;
+.trabalhador-nome {
+  font-weight: bold;
+  font-size: 1.2em;
 }

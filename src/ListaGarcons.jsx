@@ -1,61 +1,40 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ListaGarcons.css";
+import React, { useEffect, useState } from "react";
+import "./ListaGarcons.css"; // Importa o arquivo CSS
 
 const ListaGarcons = () => {
-  const [garcons, setGarcons] = useState([]);
+  const [trabalhadores, setTrabalhadores] = useState([]);
 
   useEffect(() => {
     axios
-      .get("http://localhost:3001/garcons")
+      .get("http://localhost:3001/trabalhadores")
       .then((response) => {
-        setGarcons(response.data);
+        setTrabalhadores(response.data);
       })
       .catch((error) => {
-        console.error("Erro ao obter lista de garçons:", error);
+        console.error(
+          "Erro ao buscar trabalhadores:",
+          error.response ? error.response.data : error.message
+        );
       });
   }, []);
 
-  const renderEstrelas = (avaliacao) => {
-    const estrelas = [];
-    for (let i = 0; i < 5; i++) {
-      if (i < avaliacao) {
-        estrelas.push(<span key={i}>&#9733;</span>); // Estrela preenchida
-      } else {
-        estrelas.push(<span key={i}>&#9734;</span>); // Estrela vazia
-      }
-    }
-    return estrelas;
-  };
-
   return (
-    <div>
-      <div className="garcons-container">
-        {garcons.map((garcom) => (
-          <div key={garcom.id} className="garcon-card">
-            <div className="garcon-info">
-              <div className="profile-picture">
-                <img
-                  src={garcom.fotoPerfil || "/images/default-profile.jpg"}
-                  alt="Foto"
-                />
-              </div>
-              <div>
-                <h2>{garcom.nome}</h2>
-                <p>Idade: {garcom.idade}</p>
-                <p>Telefone: {garcom.telefone}</p>
-                <p>Trabalhos Concluídos: {garcom.trabalhosConcluidos}</p>
-                <div className="garcon-rating">
-                  Avaliação: {renderEstrelas(garcom.avaliacao)}
-                </div>
-              </div>
-            </div>
-            <div className="garcon-description">
-              <p>{garcom.descricao}</p>
-            </div>
-          </div>
+    <div className="trabalhadores-container">
+      <ul className="trabalhadores-list">
+        {trabalhadores.map((trabalhador) => (
+          <li key={trabalhador.id} className="trabalhador-card">
+            <h1 className="trabalhador-nome"> {trabalhador.nome}</h1>
+            <p className="trabalhador-idade">Idade: {trabalhador.idade} Anos</p>
+            <p className="trabalhador-telefone">
+              Telefone: {trabalhador.telefone}
+            </p>
+            <p className="trabalhador-categoria">
+              Categoria: {trabalhador.categoria}
+            </p>
+          </li>
         ))}
-      </div>
+      </ul>
     </div>
   );
 };

@@ -4,31 +4,39 @@ import { useNavigate } from "react-router-dom";
 import "./Cadastro.css";
 
 const Cadastro = () => {
+  const [tipo, setTipo] = useState("PJ");
   const [nome, setNome] = useState("");
   const [cpfCnpj, setCpfCnpj] = useState("");
   const [telefone, setTelefone] = useState("");
   const [email, setEmail] = useState("");
   const [senha, setSenha] = useState("");
+  const [idade, setIdade] = useState("");
+  const [categoria, setCategoria] = useState("");
   const [erroCpfCnpj, setErroCpfCnpj] = useState("");
   const [erroTelefone, setErroTelefone] = useState("");
   const [erroEmail, setErroEmail] = useState("");
   const [erroSenha, setErroSenha] = useState("");
   const [erroCadastro, setErroCadastro] = useState("");
-  const navigate = useNavigate(); // Hook para redirecionamento
+  const navigate = useNavigate();
 
   const handleCadastro = () => {
     if (validateForm()) {
+      const data = {
+        nome,
+        cpfCnpj,
+        telefone,
+        email,
+        senha,
+        tipo,
+        idade: tipo === "PF" ? idade : null,
+        categoria: tipo === "PF" ? categoria : null,
+      };
+
       axios
-        .post("http://localhost:3001/cadastro", {
-          nome,
-          cpfCnpj,
-          telefone,
-          email,
-          senha,
-        })
+        .post("http://localhost:3001/cadastro", data)
         .then((response) => {
           alert("Usuário cadastrado com sucesso");
-          navigate("/"); // Redireciona para a lista de garçons
+          navigate("/");
         })
         .catch((error) => {
           console.error(error);
@@ -40,7 +48,6 @@ const Cadastro = () => {
   const validateForm = () => {
     let valid = true;
 
-    // CPF/CNPJ validation
     if (!validarCpfCnpj(cpfCnpj)) {
       setErroCpfCnpj("CPF ou CNPJ inválido");
       valid = false;
@@ -48,7 +55,6 @@ const Cadastro = () => {
       setErroCpfCnpj("");
     }
 
-    // Phone validation
     if (!/^\d{10,11}$/.test(telefone)) {
       setErroTelefone("Telefone inválido");
       valid = false;
@@ -56,7 +62,6 @@ const Cadastro = () => {
       setErroTelefone("");
     }
 
-    // Email validation
     if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(email)) {
       setErroEmail("Email inválido");
       valid = false;
@@ -64,7 +69,6 @@ const Cadastro = () => {
       setErroEmail("");
     }
 
-    // Password validation
     if (senha.length < 6) {
       setErroSenha("Senha deve ter no mínimo 6 caracteres");
       valid = false;
@@ -98,6 +102,14 @@ const Cadastro = () => {
   return (
     <div className="input-container">
       <h2>Cadastre-se</h2>
+      <select
+        value={tipo}
+        onChange={(e) => setTipo(e.target.value)}
+        className="input-field"
+      >
+        <option value="PJ">Pessoa Jurídica</option>
+        <option value="PF">Pessoa Física</option>
+      </select>
       <input
         type="text"
         placeholder="Nome"
@@ -137,6 +149,33 @@ const Cadastro = () => {
         className="input-field"
       />
       {erroSenha && <p className="error-message">{erroSenha}</p>}
+      {tipo === "PF" && (
+        <>
+          <input
+            type="number"
+            placeholder="Idade"
+            value={idade}
+            onChange={(e) => setIdade(e.target.value)}
+            className="input-field"
+          />
+          <select
+            value={categoria}
+            onChange={(e) => setCategoria(e.target.value)}
+            className="input-field"
+          >
+            <option value="">Selecione a Categoria</option>
+            <option value="Garçon">Garçon</option>
+            <option value="Cozinheiro">Cozinheiro</option>
+            <option value="Atendente">Atendente</option>
+            <option value="Chefe de Cozinha">Chefe de Cozinha</option>
+            <option value="Sushiman">Sushiman</option>
+            <option value="Pizzaiolo">Pizzaiolo</option>
+            <option value="Churrasqueiro">Churrasqueiro</option>
+            <option value="Auxiliar de Cozinha">Auxiliar de Cozinha</option>
+            <option value="Entregador">Entregador</option>
+          </select>
+        </>
+      )}
       <button onClick={handleCadastro} className="submit-button">
         Cadastrar
       </button>

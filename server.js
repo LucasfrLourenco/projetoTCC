@@ -42,7 +42,8 @@ function verificarToken(req, res, next) {
 
 // Rota de cadastro com validação de usuário existente
 app.post("/cadastro", async (req, res) => {
-  const { nome, cpfCnpj, telefone, email, senha } = req.body;
+  const { nome, cpfCnpj, telefone, email, senha, tipo, idade, categoria } =
+    req.body;
 
   try {
     // Verificar se já existe um usuário com o mesmo email ou CPF/CNPJ
@@ -60,10 +61,10 @@ app.post("/cadastro", async (req, res) => {
 
       const hashedSenha = await bcrypt.hash(senha, 10);
 
-      const sqlInsert = `INSERT INTO usuarios (nome, cpfCnpj, telefone, email, senha) VALUES (?, ?, ?, ?, ?)`;
+      const sqlInsert = `INSERT INTO usuarios (nome, cpfCnpj, telefone, email, senha, tipo, idade, categoria) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
       db.query(
         sqlInsert,
-        [nome, cpfCnpj, telefone, email, hashedSenha],
+        [nome, cpfCnpj, telefone, email, hashedSenha, tipo, idade, categoria],
         (err, result) => {
           if (err) {
             console.error(err);
@@ -154,16 +155,18 @@ app.put("/perfil", verificarToken, async (req, res) => {
   }
 });
 
-app.listen(PORT, () => {
-  console.log(`Servidor rodando na porta ${PORT}`);
-});
-app.get("/garcons", (req, res) => {
-  const sql = "SELECT * FROM usuarios";
+// Rota para listar trabalhadores (Pessoa Física)
+app.get("/trabalhadores", (req, res) => {
+  const sql = `SELECT nome, idade, telefone, categoria FROM usuarios WHERE tipo = 'PF'`;
   db.query(sql, (err, result) => {
     if (err) {
       console.error(err);
-      return res.status(500).send("Erro ao obter a lista de garçons");
+      return res.status(500).send("Erro ao obter a lista de trabalhadores");
     }
     res.status(200).json(result);
   });
+});
+
+app.listen(PORT, () => {
+  console.log(`Servidor rodando na porta ${PORT}`);
 });
