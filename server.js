@@ -31,11 +31,12 @@ function verificarToken(req, res, next) {
     return res.status(401).send("Token não fornecido");
   }
 
-  jwt.verify(token, "segredo", (err, decoded) => {
+  jwt.verify(token.split(" ")[1], "segredo", (err, decoded) => {
     if (err) {
       return res.status(403).send("Token inválido");
     }
     req.userId = decoded.id;
+    console.log("Decoded user ID:", req.userId); // Log para depuração
     next();
   });
 }
@@ -116,31 +117,45 @@ app.post("/login", async (req, res) => {
 // Rota de perfil
 app.get("/perfil", verificarToken, (req, res) => {
   const userId = req.userId;
+  console.log(`Fetching profile for user ID: ${userId}`);
 
-  const sql = `SELECT * FROM usuarios WHERE id = ?`;
+  const sql = "SELECT * FROM usuarios WHERE id = ?";
   db.query(sql, [userId], (err, result) => {
     if (err) {
-      console.error(err);
+      console.error("Database error:", err);
       return res.status(500).send("Erro ao obter perfil do usuário");
+    }
+    if (result.length === 0) {
+      console.error("User not found with ID:", userId);
+      return res.status(404).send("Usuário não encontrado");
     }
     const usuario = result[0];
     res.status(200).json(usuario);
   });
 });
 
-// Rota para atualizar perfil
 app.put("/perfil", verificarToken, async (req, res) => {
   const { telefone, senha, descricao, disponivel } = req.body;
   const userId = req.userId;
 
   try {
-    const hashedSenha = senha ? await bcrypt.hash(senha, 10) : undefined;
-    const sql = `UPDATE usuarios SET telefone = ?, ${
-      hashedSenha ? "senha = ?, " : ""
-    } descricao = ?, disponivel = ? WHERE id = ?`;
-    const params = hashedSenha
-      ? [telefone, hashedSenha, descricao, disponivel, userId]
-      : [telefone, descricao, disponivel, userId];
+    let sql = "UPDATE usuarios SET ";
+    const params = [];
+    if (telefone) {
+      sql += "telefone = ?, ";
+      params.push(telefone);
+    }
+    if (senha) {
+      const hashedSenha = await bcrypt.hash(senha, 10);
+      sql += "senha = ?, ";
+      params.push(hashedSenha);
+    }
+    if (descricao) {
+      sql += "descricao = ?, ";
+      params.push(descricao);
+    }
+    sql += "disponivel = ? WHERE id = ?";
+    params.push(disponivel, userId);
 
     db.query(sql, params, (err, result) => {
       if (err) {
