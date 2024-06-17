@@ -36,7 +36,6 @@ function verificarToken(req, res, next) {
       return res.status(403).send("Token inválido");
     }
     req.userId = decoded.id;
-    console.log("Decoded user ID:", req.userId); // Log para depuração
     next();
   });
 }
@@ -117,8 +116,6 @@ app.post("/login", async (req, res) => {
 // Rota de perfil
 app.get("/perfil", verificarToken, (req, res) => {
   const userId = req.userId;
-  console.log(`Fetching profile for user ID: ${userId}`);
-
   const sql = "SELECT * FROM usuarios WHERE id = ?";
   db.query(sql, [userId], (err, result) => {
     if (err) {
@@ -126,7 +123,6 @@ app.get("/perfil", verificarToken, (req, res) => {
       return res.status(500).send("Erro ao obter perfil do usuário");
     }
     if (result.length === 0) {
-      console.error("User not found with ID:", userId);
       return res.status(404).send("Usuário não encontrado");
     }
     const usuario = result[0];
