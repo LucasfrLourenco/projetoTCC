@@ -1,0 +1,55 @@
+/* Exemplo de CSS para Lista de Trabalhadores */
+.trabalhadores-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.trabalhadores-list {
+  list-style-type: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+}
+
+.trabalhador-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.trabalhador-card:hover {
+  transform: scale(1.05);
+}
+
+.trabalhador-imagem {
+  width: 100%;
+  height: auto;
+  border-radius: 5px 5px 0 0;
+}
+
+.trabalhador-info {
+  padding: 10px;
+}
+
+/* Exemplo de CSS para Detalhes do Trabalhador */
+.detalhes-container {
+  max-width: 600px;
+  margin: auto;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.detalhes-info {
+  margin-top: 20px;
+}
+
+.trabalhador-imagem {
+  width: 100%;
+  height: auto;
+  border-radius: 5px;
+  margin-bottom: 20px;
+}

@@ -1,13 +1,14 @@
 // App.js
-import React, { useContext } from "react";
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListaGarcons from "./ListaGarcons";
 import Login from "./Login";
 import Cadastro from "./cadastro";
 import Perfil from "./Perfil";
 import PrivateRoute from "./PrivateRoute";
-import { AuthProvider, AuthContext } from "./AuthContext";
+import { AuthProvider } from "./AuthContext";
 import Header from "./Header";
+import DetalhesTrabalhador from "./DetalhesTrabalhador";
 import "./App.css";
 
 function App() {
@@ -24,6 +25,11 @@ function App() {
                 path="/perfil"
                 element={<PrivateRoute element={<Perfil />} />}
               />
+              <Route
+                path="/trabalhador/:id"
+                element={<DetalhesTrabalhador />}
+              />{" "}
+              {/* Rota de detalhes */}
               <Route path="/" element={<ListaGarcons />} />
             </Routes>
           </main>

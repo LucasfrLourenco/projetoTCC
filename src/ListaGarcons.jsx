@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import "./ListaGarcons.css"; // Importa o arquivo CSS
 
 const ListaGarcons = () => {
@@ -24,14 +25,15 @@ const ListaGarcons = () => {
       <ul className="trabalhadores-list">
         {trabalhadores.map((trabalhador) => (
           <li key={trabalhador.id} className="trabalhador-card">
-            <h1 className="trabalhador-nome"> {trabalhador.nome}</h1>
-            <p className="trabalhador-idade">Idade: {trabalhador.idade} Anos</p>
-            <p className="trabalhador-telefone">
-              Telefone: {trabalhador.telefone}
-            </p>
-            <p className="trabalhador-categoria">
-              Categoria: {trabalhador.categoria}
-            </p>
+            <Link to={`/trabalhador/${trabalhador.id}`}>
+              <h1 className="trabalhador-nome">{trabalhador.nome}</h1>
+              <p className="trabalhador-idade">
+                Idade: {trabalhador.idade} Anos
+              </p>
+              <p className="trabalhador-categoria">
+                Categoria: {trabalhador.categoria}
+              </p>
+            </Link>
           </li>
         ))}
       </ul>

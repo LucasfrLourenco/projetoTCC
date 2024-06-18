@@ -1,38 +1,48 @@
 .trabalhadores-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 800px;
+  margin: 20px auto;
   padding: 20px;
 }
 
 .trabalhadores-list {
-  display: flex;
-  flex-wrap: wrap;
-  list-style-type: none;
+  list-style: none;
   padding: 0;
-  margin: -10px;
-  margin-bottom: 40px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .trabalhador-card {
-  background-color: #ffffff;
-  border: 3px solid #853100;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  padding: 45px;
-  margin: 10px;
-  width: calc(25% - 20px); /* Quatro cards por linha */
+  overflow: hidden;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  transition: box-shadow 0.3s;
+  transition: transform 0.3s ease-in-out;
+  background-color: #f9f9f9;
 }
 
 .trabalhador-card:hover {
+  transform: scale(1.05);
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
 }
 
-.trabalhador-card p {
-  margin: 5px 0;
+.trabalhador-card a {
+  text-decoration: none;
+  color: inherit;
 }
 
-.trabalhador-nome {
-  font-weight: bold;
-  font-size: 1.2em;
+.trabalhador-card h1 {
+  font-size: 24px;
+  color: #333;
+  margin: 20px;
+}
+
+.trabalhador-card p {
+  font-size: 18px;
+  color: #666;
+  margin: 10px 20px;
+}
+
+.trabalhador-card:hover {
+  background-color: #f0f0f0;
 }

@@ -166,15 +166,34 @@ app.put("/perfil", verificarToken, async (req, res) => {
   }
 });
 
-// Rota para listar trabalhadores (Pessoa Física)
 app.get("/trabalhadores", (req, res) => {
-  const sql = `SELECT nome, idade, telefone, categoria FROM usuarios WHERE tipo = 'PF'`;
+  const sql =
+    "SELECT id, nome, idade, telefone, categoria, descricao FROM usuarios WHERE tipo = 'PF' AND disponivel = 1";
   db.query(sql, (err, result) => {
     if (err) {
-      console.error(err);
+      console.error("Erro ao obter a lista de trabalhadores:", err);
       return res.status(500).send("Erro ao obter a lista de trabalhadores");
     }
+    console.log("Trabalhadores retornados:", result); // Log dos trabalhadores
     res.status(200).json(result);
+  });
+});
+
+app.get("/trabalhador/:id", (req, res) => {
+  const userId = req.params.id;
+
+  const sql =
+    "SELECT id, nome, email, cpfCnpj, idade, telefone, categoria, descricao, disponivel FROM usuarios WHERE id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error("Erro ao obter detalhes do trabalhador:", err);
+      return res.status(500).send("Erro ao obter detalhes do trabalhador");
+    }
+    if (result.length === 0) {
+      return res.status(404).send("Trabalhador não encontrado");
+    }
+    const trabalhador = result[0];
+    res.status(200).json(trabalhador);
   });
 });
 
