@@ -164,7 +164,7 @@ const Cadastro = () => {
             className="input-field"
           >
             <option value="">Selecione a Categoria</option>
-            <option value="Garçon">Garçon</option>
+            <option value="Garçom">Garçom</option>
             <option value="Cozinheiro">Cozinheiro</option>
             <option value="Atendente">Atendente</option>
             <option value="Chefe de Cozinha">Chefe de Cozinha</option>

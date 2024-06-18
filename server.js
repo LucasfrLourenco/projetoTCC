@@ -131,12 +131,13 @@ app.get("/perfil", verificarToken, (req, res) => {
 });
 
 app.put("/perfil", verificarToken, async (req, res) => {
-  const { telefone, senha, descricao, disponivel } = req.body;
+  const { telefone, senha, descricao, disponivel, categoria } = req.body;
   const userId = req.userId;
 
   try {
     let sql = "UPDATE usuarios SET ";
     const params = [];
+
     if (telefone) {
       sql += "telefone = ?, ";
       params.push(telefone);
@@ -150,8 +151,20 @@ app.put("/perfil", verificarToken, async (req, res) => {
       sql += "descricao = ?, ";
       params.push(descricao);
     }
-    sql += "disponivel = ? WHERE id = ?";
-    params.push(disponivel, userId);
+    if (disponivel !== undefined) {
+      sql += "disponivel = ?, ";
+      params.push(disponivel);
+    }
+    if (categoria) {
+      sql += "categoria = ?, ";
+      params.push(categoria);
+    }
+
+    // Remove a última vírgula e espaço do SQL
+    sql = sql.slice(0, -2);
+
+    sql += " WHERE id = ?";
+    params.push(userId);
 
     db.query(sql, params, (err, result) => {
       if (err) {

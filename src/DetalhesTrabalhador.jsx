@@ -42,7 +42,9 @@ const DetalhesTrabalhador = () => {
           Descrição: {trabalhador.descricao}
         </p>
         {trabalhador.disponivel ? (
-          <p className="trabalhador-disponivel">Disponível</p>
+          <p style={{ color: "green" }} className="trabalhador-disponivel">
+            Disponível
+          </p>
         ) : (
           <p className="trabalhador-indisponivel">Indisponível</p>
         )}

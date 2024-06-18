@@ -1,25 +1,33 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import "./perfil.css";
 
 const Perfil = () => {
+  const [nomePerfil, setNomePerfil] = useState("");
+  const [novoNome, setNovoNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
   const [descricao, setDescricao] = useState("");
   const [disponivel, setDisponivel] = useState(false);
+  const [categoria, setCategoria] = useState("");
   const [error, setError] = useState(null);
+  const [editMode, setEditMode] = useState(false);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
-    // Fetch profile data on mount
     const fetchProfile = async () => {
       try {
         const response = await axios.get("http://localhost:3001/perfil", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const { telefone, descricao, disponivel } = response.data;
+        const { telefone, descricao, disponivel, categoria, nome } =
+          response.data;
         setTelefone(telefone);
         setDescricao(descricao);
         setDisponivel(disponivel);
+        setCategoria(categoria);
+        setNomePerfil(nome);
+        setNovoNome(nome);
       } catch (error) {
         console.error("Erro ao carregar perfil", error);
         setError("Erro ao carregar perfil");
@@ -36,49 +44,97 @@ const Perfil = () => {
     try {
       await axios.put(
         "http://localhost:3001/perfil",
-        { telefone, senha, descricao, disponivel },
+        { telefone, senha, descricao, disponivel, categoria, nome: novoNome },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Perfil atualizado com sucesso!");
+      setNomePerfil(novoNome);
+      setEditMode(false);
     } catch (error) {
       console.error("Erro ao atualizar perfil", error);
       setError("Erro ao atualizar perfil. Por favor, tente novamente.");
     }
   };
 
+  const handleEditClick = () => {
+    setEditMode(true); // Ativar modo de edição ao clicar no botão de editar
+  };
+
+  const handleCancelEdit = () => {
+    setEditMode(false); // Cancelar edição e voltar para o modo de visualização
+  };
+
   return (
     <div className="perfil-container">
-      <form onSubmit={handleUpdate}>
-        <h2>Perfil</h2>
-        {error && <p className="error-message">{error}</p>}
-        <input
-          type="text"
-          placeholder="Telefone"
-          value={telefone}
-          onChange={(e) => setTelefone(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Senha"
-          value={senha}
-          onChange={(e) => setSenha(e.target.value)}
-        />
-        <textarea
-          placeholder="Descrição"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-        ></textarea>
-        <label>
-          Disponível:
+      {!editMode ? (
+        <div>
+          <h2>Perfil de {nomePerfil}</h2>
+          {error && <p className="error-message">{error}</p>}
+          <p>Telefone: {telefone}</p>
+          <p>Descrição: {descricao}</p>
+          <p>Categoria: {categoria}</p>
+          <p>Disponível: {disponivel ? "Sim" : "Não"}</p>
+          <button onClick={handleEditClick}>Editar</button>
+        </div>
+      ) : (
+        <form onSubmit={handleUpdate}>
+          <h2>Editar Perfil</h2>
+          {error && <p className="error-message">{error}</p>}
           <input
-            type="checkbox"
-            checked={disponivel}
-            onChange={(e) => setDisponivel(e.target.checked)}
+            type="text"
+            placeholder="Nome"
+            value={novoNome}
+            onChange={(e) => setNovoNome(e.target.value)}
           />
-        </label>
-        <button type="submit">Atualizar</button>
-      </form>
+          <input
+            type="text"
+            placeholder="Telefone"
+            value={telefone}
+            onChange={(e) => setTelefone(e.target.value)}
+          />
+          <input
+            type="password"
+            placeholder="Senha"
+            value={senha}
+            onChange={(e) => setSenha(e.target.value)}
+          />
+          <textarea
+            placeholder="Descrição"
+            value={descricao}
+            onChange={(e) => setDescricao(e.target.value)}
+          ></textarea>
+          <label>
+            Categoria:
+            <select
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            >
+              <option value="">Selecione a Categoria</option>
+              <option value="Garçom">Garçom</option>
+              <option value="Cozinheiro">Cozinheiro</option>
+              <option value="Atendente">Atendente</option>
+              <option value="Chefe de Cozinha">Chefe de Cozinha</option>
+              <option value="Sushiman">Sushiman</option>
+              <option value="Pizzaiolo">Pizzaiolo</option>
+              <option value="Churrasqueiro">Churrasqueiro</option>
+              <option value="Auxiliar de Cozinha">Auxiliar de Cozinha</option>
+              <option value="Entregador">Entregador</option>
+            </select>
+          </label>
+          <label>
+            Disponível:
+            <input
+              type="checkbox"
+              checked={disponivel}
+              onChange={(e) => setDisponivel(e.target.checked)}
+            />
+          </label>
+          <button type="submit">Salvar</button>
+          <button type="button" onClick={handleCancelEdit}>
+            Cancelar
+          </button>
+        </form>
+      )}
     </div>
   );
 };
