@@ -1,5 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
+import { AuthContext } from "./AuthContext";
+import Stars from "./Stars";
 import "./perfil.css";
 
 const Perfil = () => {
@@ -12,6 +14,8 @@ const Perfil = () => {
   const [categoria, setCategoria] = useState("");
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
+  const [mediaAvaliacao, setMediaAvaliacao] = useState(0);
+  const { userType } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
   useEffect(() => {
@@ -20,7 +24,7 @@ const Perfil = () => {
         const response = await axios.get("http://localhost:3001/perfil", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const { telefone, descricao, disponivel, categoria, nome } =
+        const { telefone, descricao, disponivel, categoria, nome, id } =
           response.data;
         setTelefone(telefone);
         setDescricao(descricao);
@@ -28,6 +32,14 @@ const Perfil = () => {
         setCategoria(categoria);
         setNomePerfil(nome);
         setNovoNome(nome);
+
+        // Fetch media das avaliações
+        if (userType === "PF") {
+          const mediaResponse = await axios.get(
+            `http://localhost:3001/avaliacoes/media/${id}`
+          );
+          setMediaAvaliacao(mediaResponse.data);
+        }
       } catch (error) {
         console.error("Erro ao carregar perfil", error);
         setError("Erro ao carregar perfil");
@@ -35,7 +47,7 @@ const Perfil = () => {
     };
 
     fetchProfile();
-  }, [token]);
+  }, [token, userType]);
 
   const handleUpdate = async (e) => {
     e.preventDefault();
@@ -74,6 +86,13 @@ const Perfil = () => {
           <p>Descrição: {descricao}</p>
           <p>Categoria: {categoria}</p>
           <p>Disponível: {disponivel ? "Sim" : "Não"}</p>
+          {userType === "PF" && (
+            <div className="media-avaliacao">
+              <h3>Média das Avaliações:</h3>
+              <Stars rating={Math.round(mediaAvaliacao)} />
+              <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+            </div>
+          )}
           <button onClick={handleEditClick}>Editar</button>
         </div>
       ) : (
