@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import { AuthContext } from "./AuthContext";
+import Avaliacao from "./Avaliacao";
+import Stars from "./Stars";
 import "./DetalhesTrabalhador.css";
 
 const DetalhesTrabalhador = () => {
   const { id } = useParams();
   const [trabalhador, setTrabalhador] = useState(null);
+  const [avaliacoes, setAvaliacoes] = useState([]);
+  const [mediaAvaliacao, setMediaAvaliacao] = useState(0);
+  const [mostrarMais, setMostrarMais] = useState(false);
+  const { isAuthenticated, userType } = useContext(AuthContext);
 
   useEffect(() => {
     axios
@@ -16,7 +23,47 @@ const DetalhesTrabalhador = () => {
       .catch((error) => {
         console.error("Erro ao buscar detalhes do trabalhador:", error);
       });
+
+    axios
+      .get(`http://localhost:3001/avaliacoes/${id}`)
+      .then((response) => {
+        setAvaliacoes(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar avaliações:", error);
+      });
+
+    axios
+      .get(`http://localhost:3001/avaliacoes/media/${id}`)
+      .then((response) => {
+        setMediaAvaliacao(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao calcular média das avaliações:", error);
+      });
   }, [id]);
+
+  const handleAvaliado = () => {
+    axios
+      .get(`http://localhost:3001/avaliacoes/${id}`)
+      .then((response) => {
+        setAvaliacoes(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao buscar avaliações:", error);
+      });
+
+    axios
+      .get(`http://localhost:3001/avaliacoes/media/${id}`)
+      .then((response) => {
+        setMediaAvaliacao(response.data);
+      })
+      .catch((error) => {
+        console.error("Erro ao calcular média das avaliações:", error);
+      });
+  };
+
+  const avaliacoesExibidas = mostrarMais ? avaliacoes : avaliacoes.slice(0, 2);
 
   if (!trabalhador) {
     return <p>Carregando...</p>;
@@ -47,6 +94,30 @@ const DetalhesTrabalhador = () => {
           </p>
         ) : (
           <p className="trabalhador-indisponivel">Indisponível</p>
+        )}
+        <div className="media-avaliacao">
+          <h3>Média das Avaliações:</h3>
+          <Stars rating={Math.round(mediaAvaliacao)} />
+          <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+        </div>
+      </div>
+      <div className="avaliacoes-container">
+        <h2>Avaliações</h2>
+        {avaliacoesExibidas.map((avaliacao, index) => (
+          <div key={index} className="avaliacao">
+            <Stars rating={avaliacao.nota} />
+            <p>
+              <strong>{avaliacao.avaliador}:</strong> {avaliacao.comentario}
+            </p>
+          </div>
+        ))}
+        {avaliacoes.length > 2 && (
+          <button onClick={() => setMostrarMais(!mostrarMais)}>
+            {mostrarMais ? "Mostrar Menos" : "Mostrar Mais"}
+          </button>
+        )}
+        {isAuthenticated && userType === "PJ" && (
+          <Avaliacao trabalhadorId={id} onAvaliado={handleAvaliado} />
         )}
       </div>
     </div>

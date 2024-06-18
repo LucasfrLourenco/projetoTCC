@@ -1,6 +1,7 @@
 .perfil-container {
   max-width: 600px;
   margin: 0 auto;
+  margin-bottom: 70px;
   padding: 20px;
   border: 2px solid #de6808;
   border-radius: 8px;

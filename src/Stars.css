@@ -1,0 +1,12 @@
+.stars {
+  display: flex;
+  font-size: 20px;
+}
+
+.filled {
+  color: gold;
+}
+
+.empty {
+  color: lightgray;
+}

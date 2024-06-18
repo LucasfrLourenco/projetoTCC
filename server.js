@@ -80,7 +80,6 @@ app.post("/cadastro", async (req, res) => {
   }
 });
 
-// Rota de login com validação
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -99,7 +98,9 @@ app.post("/login", async (req, res) => {
           const token = jwt.sign({ id: usuario.id }, "segredo", {
             expiresIn: "1h",
           });
-          return res.status(200).json({ token, userId: usuario.id });
+          return res
+            .status(200)
+            .json({ token, tipo: usuario.tipo, userId: usuario.id }); // Adicione o tipo de usuário aqui
         } else {
           return res.status(401).send("Senha incorreta");
         }
@@ -207,6 +208,61 @@ app.get("/trabalhador/:id", (req, res) => {
     }
     const trabalhador = result[0];
     res.status(200).json(trabalhador);
+  });
+});
+
+// Endpoint para adicionar avaliação
+app.post("/avaliacao", verificarToken, (req, res) => {
+  const { trabalhador_id, nota, comentario } = req.body;
+  const usuario_id = req.userId;
+
+  // Verifica se o usuário é PJ
+  const sqlCheck = `SELECT tipo FROM usuarios WHERE id = ?`;
+  db.query(sqlCheck, [usuario_id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Erro ao verificar usuário");
+    }
+    if (result.length === 0 || result[0].tipo !== "PJ") {
+      return res.status(403).send("Apenas usuários PJ podem avaliar");
+    }
+
+    const sqlInsert = `INSERT INTO avaliacoes (trabalhador_id, usuario_id, nota, comentario) VALUES (?, ?, ?, ?)`;
+    db.query(
+      sqlInsert,
+      [trabalhador_id, usuario_id, nota, comentario],
+      (err, result) => {
+        if (err) {
+          return res.status(500).send("Erro ao adicionar avaliação");
+        }
+        res.status(200).send("Avaliação adicionada com sucesso");
+      }
+    );
+  });
+});
+
+// Endpoint para obter avaliações de um trabalhador
+app.get("/avaliacoes/:trabalhador_id", (req, res) => {
+  const { trabalhador_id } = req.params;
+
+  const sql = `SELECT a.nota, a.comentario, u.nome AS avaliador FROM avaliacoes a JOIN usuarios u ON a.usuario_id = u.id WHERE trabalhador_id = ?`;
+  db.query(sql, [trabalhador_id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Erro ao obter avaliações");
+    }
+    res.status(200).json(result);
+  });
+});
+
+// Endpoint para obter a média das avaliações de um trabalhador
+app.get("/avaliacoes/media/:trabalhador_id", (req, res) => {
+  const { trabalhador_id } = req.params;
+
+  const sql = `SELECT AVG(nota) as media FROM avaliacoes WHERE trabalhador_id = ?`;
+  db.query(sql, [trabalhador_id], (err, result) => {
+    if (err) {
+      return res.status(500).send("Erro ao calcular média das avaliações");
+    }
+    res.status(200).json(result[0].media);
   });
 });
 

@@ -1,4 +1,3 @@
-// login.js
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
@@ -21,8 +20,8 @@ const Login = () => {
         email,
         senha,
       });
-      const { token } = response.data;
-      login(token);
+      const { token, tipo } = response.data; // Assumindo que o tipo do usuário é retornado
+      login(token, tipo);
       navigate("/perfil");
     } catch (error) {
       console.error("Erro ao fazer login", error);

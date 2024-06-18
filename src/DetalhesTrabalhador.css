@@ -41,6 +41,7 @@
   border-radius: 5px;
   padding: 20px;
   background-color: #f9f9f9;
+  margin-bottom: 90px;
 }
 
 .detalhes-info {
@@ -52,4 +53,17 @@
   height: auto;
   border-radius: 5px;
   margin-bottom: 20px;
+}
+
+.avaliacoes-container {
+  width: 80%;
+  margin-top: 20px;
+}
+
+.avaliacao {
+  border: 1px solid #ddd;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #f9f9f9;
 }
