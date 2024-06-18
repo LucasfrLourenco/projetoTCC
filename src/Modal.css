@@ -8,6 +8,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000; /* Ajuste conforme necessário */
 }
 
 .modal-content {
@@ -16,6 +17,8 @@
   border-radius: 8px;
   width: 80%;
   max-width: 600px;
+  max-height: 80%; /* Altura máxima do modal em relação à janela */
+  overflow-y: auto; /* Habilita scroll se o conteúdo exceder a altura máxima */
 }
 
 .modal-close {
@@ -26,4 +29,9 @@
   top: 10px;
   right: 10px;
   cursor: pointer;
+}
+
+/* Adicione margem inferior para separar o modal do fundo */
+.modal-content {
+  margin: 80px 80px; /* Ajuste conforme necessário */
 }
