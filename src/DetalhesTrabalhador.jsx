@@ -10,57 +10,49 @@ const DetalhesTrabalhador = () => {
   const { id } = useParams();
   const [trabalhador, setTrabalhador] = useState(null);
   const [avaliacoes, setAvaliacoes] = useState([]);
-  const [mediaAvaliacao, setMediaAvaliacao] = useState(0);
+  const [mediaAvaliacao, setMediaAvaliacao] = useState(null);
   const [mostrarMais, setMostrarMais] = useState(false);
   const { isAuthenticated, userType } = useContext(AuthContext);
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:3001/trabalhador/${id}`)
-      .then((response) => {
-        setTrabalhador(response.data);
-      })
-      .catch((error) => {
+    const fetchData = async () => {
+      try {
+        const trabalhadorResponse = await axios.get(
+          `http://localhost:3001/trabalhador/${id}`
+        );
+        setTrabalhador(trabalhadorResponse.data);
+
+        const avaliacoesResponse = await axios.get(
+          `http://localhost:3001/avaliacoes/${id}`
+        );
+        setAvaliacoes(avaliacoesResponse.data);
+
+        const mediaResponse = await axios.get(
+          `http://localhost:3001/avaliacoes/media/${id}`
+        );
+        setMediaAvaliacao(mediaResponse.data);
+      } catch (error) {
         console.error("Erro ao buscar detalhes do trabalhador:", error);
-      });
+      }
+    };
 
-    axios
-      .get(`http://localhost:3001/avaliacoes/${id}`)
-      .then((response) => {
-        setAvaliacoes(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar avaliações:", error);
-      });
-
-    axios
-      .get(`http://localhost:3001/avaliacoes/media/${id}`)
-      .then((response) => {
-        setMediaAvaliacao(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao calcular média das avaliações:", error);
-      });
+    fetchData();
   }, [id]);
 
-  const handleAvaliado = () => {
-    axios
-      .get(`http://localhost:3001/avaliacoes/${id}`)
-      .then((response) => {
-        setAvaliacoes(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao buscar avaliações:", error);
-      });
+  const handleAvaliado = async () => {
+    try {
+      const avaliacoesResponse = await axios.get(
+        `http://localhost:3001/avaliacoes/${id}`
+      );
+      setAvaliacoes(avaliacoesResponse.data);
 
-    axios
-      .get(`http://localhost:3001/avaliacoes/media/${id}`)
-      .then((response) => {
-        setMediaAvaliacao(response.data);
-      })
-      .catch((error) => {
-        console.error("Erro ao calcular média das avaliações:", error);
-      });
+      const mediaResponse = await axios.get(
+        `http://localhost:3001/avaliacoes/media/${id}`
+      );
+      setMediaAvaliacao(mediaResponse.data);
+    } catch (error) {
+      console.error("Erro ao atualizar avaliações:", error);
+    }
   };
 
   const avaliacoesExibidas = mostrarMais ? avaliacoes : avaliacoes.slice(0, 2);
@@ -97,8 +89,14 @@ const DetalhesTrabalhador = () => {
         )}
         <div className="media-avaliacao">
           <h3>Média das Avaliações:</h3>
-          <Stars rating={Math.round(mediaAvaliacao)} />
-          <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+          {mediaAvaliacao !== null ? (
+            <>
+              <Stars rating={Math.round(mediaAvaliacao)} />
+              <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+            </>
+          ) : (
+            <p>Ainda não avaliado</p>
+          )}
         </div>
       </div>
       <div className="avaliacoes-container">

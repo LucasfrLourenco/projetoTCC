@@ -46,7 +46,6 @@ app.post("/cadastro", async (req, res) => {
     req.body;
 
   try {
-    // Verificar se já existe um usuário com o mesmo email ou CPF/CNPJ
     const sqlCheck = `SELECT * FROM usuarios WHERE email = ? OR cpfCnpj = ?`;
     db.query(sqlCheck, [email, cpfCnpj], async (err, result) => {
       if (err) {
@@ -60,7 +59,6 @@ app.post("/cadastro", async (req, res) => {
       }
 
       const hashedSenha = await bcrypt.hash(senha, 10);
-
       const sqlInsert = `INSERT INTO usuarios (nome, cpfCnpj, telefone, email, senha, tipo, idade, categoria) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
       db.query(
         sqlInsert,
@@ -80,6 +78,7 @@ app.post("/cadastro", async (req, res) => {
   }
 });
 
+// Rota de login com validação
 app.post("/login", async (req, res) => {
   const { email, senha } = req.body;
 
@@ -100,7 +99,7 @@ app.post("/login", async (req, res) => {
           });
           return res
             .status(200)
-            .json({ token, tipo: usuario.tipo, userId: usuario.id }); // Adicione o tipo de usuário aqui
+            .json({ token, tipo: usuario.tipo, userId: usuario.id });
         } else {
           return res.status(401).send("Senha incorreta");
         }
@@ -180,6 +179,7 @@ app.put("/perfil", verificarToken, async (req, res) => {
   }
 });
 
+// Rota para obter lista de trabalhadores
 app.get("/trabalhadores", (req, res) => {
   const sql =
     "SELECT id, nome, idade, telefone, categoria, descricao FROM usuarios WHERE tipo = 'PF' AND disponivel = 1";
@@ -188,14 +188,13 @@ app.get("/trabalhadores", (req, res) => {
       console.error("Erro ao obter a lista de trabalhadores:", err);
       return res.status(500).send("Erro ao obter a lista de trabalhadores");
     }
-    console.log("Trabalhadores retornados:", result); // Log dos trabalhadores
     res.status(200).json(result);
   });
 });
 
+// Rota para obter detalhes de um trabalhador
 app.get("/trabalhador/:id", (req, res) => {
   const userId = req.params.id;
-
   const sql =
     "SELECT id, nome, email, cpfCnpj, idade, telefone, categoria, descricao, disponivel FROM usuarios WHERE id = ?";
   db.query(sql, [userId], (err, result) => {
@@ -206,17 +205,15 @@ app.get("/trabalhador/:id", (req, res) => {
     if (result.length === 0) {
       return res.status(404).send("Trabalhador não encontrado");
     }
-    const trabalhador = result[0];
-    res.status(200).json(trabalhador);
+    res.status(200).json(result[0]);
   });
 });
 
-// Endpoint para adicionar avaliação
+// Rota para adicionar avaliação
 app.post("/avaliacao", verificarToken, (req, res) => {
   const { trabalhador_id, nota, comentario } = req.body;
   const usuario_id = req.userId;
 
-  // Verifica se o usuário é PJ
   const sqlCheck = `SELECT tipo FROM usuarios WHERE id = ?`;
   db.query(sqlCheck, [usuario_id], (err, result) => {
     if (err) {
@@ -240,10 +237,9 @@ app.post("/avaliacao", verificarToken, (req, res) => {
   });
 });
 
-// Endpoint para obter avaliações de um trabalhador
+// Rota para obter avaliações de um trabalhador
 app.get("/avaliacoes/:trabalhador_id", (req, res) => {
   const { trabalhador_id } = req.params;
-
   const sql = `SELECT a.nota, a.comentario, u.nome AS avaliador FROM avaliacoes a JOIN usuarios u ON a.usuario_id = u.id WHERE trabalhador_id = ?`;
   db.query(sql, [trabalhador_id], (err, result) => {
     if (err) {
@@ -253,16 +249,16 @@ app.get("/avaliacoes/:trabalhador_id", (req, res) => {
   });
 });
 
+// Rota para obter a média das avaliações de um trabalhador
 // Endpoint para obter a média das avaliações de um trabalhador
 app.get("/avaliacoes/media/:trabalhador_id", (req, res) => {
   const { trabalhador_id } = req.params;
-
   const sql = `SELECT AVG(nota) as media FROM avaliacoes WHERE trabalhador_id = ?`;
   db.query(sql, [trabalhador_id], (err, result) => {
     if (err) {
       return res.status(500).send("Erro ao calcular média das avaliações");
     }
-    res.status(200).json(result[0].media);
+    res.status(200).json(result[0].media || 0); // Retornar 0 se não houver avaliações
   });
 });
 

@@ -36,7 +36,7 @@ const Cadastro = () => {
         .post("http://localhost:3001/cadastro", data)
         .then((response) => {
           alert("Usuário cadastrado com sucesso");
-          navigate("/");
+          navigate("/login");
         })
         .catch((error) => {
           console.error(error);

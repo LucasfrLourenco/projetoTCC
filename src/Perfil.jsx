@@ -10,12 +10,13 @@ const Perfil = () => {
   const [novoNome, setNovoNome] = useState("");
   const [telefone, setTelefone] = useState("");
   const [senha, setSenha] = useState("");
+  const [idade, setIdade] = useState("");
   const [descricao, setDescricao] = useState("");
   const [disponivel, setDisponivel] = useState(false);
   const [categoria, setCategoria] = useState("");
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
-  const [mediaAvaliacao, setMediaAvaliacao] = useState(0);
+  const [mediaAvaliacao, setMediaAvaliacao] = useState(null);
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const { userType } = useContext(AuthContext);
@@ -27,7 +28,7 @@ const Perfil = () => {
         const response = await axios.get("http://localhost:3001/perfil", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const { telefone, descricao, disponivel, categoria, nome, id } =
+        const { telefone, descricao, disponivel, categoria, nome, idade, id } =
           response.data;
         setTelefone(telefone);
         setDescricao(descricao);
@@ -35,6 +36,7 @@ const Perfil = () => {
         setCategoria(categoria);
         setNomePerfil(nome);
         setNovoNome(nome);
+        setIdade(idade);
 
         // Fetch media das avaliações
         if (userType === "PF") {
@@ -65,7 +67,15 @@ const Perfil = () => {
     try {
       await axios.put(
         "http://localhost:3001/perfil",
-        { telefone, senha, descricao, disponivel, categoria, nome: novoNome },
+        {
+          telefone,
+          senha,
+          descricao,
+          disponivel,
+          categoria,
+          nome: novoNome,
+          idade,
+        },
         { headers: { Authorization: `Bearer ${token}` } }
       );
       alert("Perfil atualizado com sucesso!");
@@ -95,15 +105,39 @@ const Perfil = () => {
         <div>
           <h2>Perfil de {nomePerfil}</h2>
           {error && <p className="error-message">{error}</p>}
-          <p>Telefone: {telefone}</p>
-          <p>Descrição: {descricao}</p>
-          <p>Categoria: {categoria}</p>
-          <p>Disponível: {disponivel ? "Sim" : "Não"}</p>
+          <p>
+            <strong>Nome:</strong> {nomePerfil}
+          </p>
+          <p>
+            <strong>Telefone:</strong> {telefone}
+          </p>
+          {userType === "PF" && (
+            <>
+              <p>
+                <p>
+                  <strong>Idade:</strong> {idade}
+                </p>
+                <strong>Descrição:</strong> {descricao}
+              </p>
+              <p>
+                <strong>Categoria:</strong> {categoria}
+              </p>
+              <p>
+                <strong>Disponível:</strong> {disponivel ? "Sim" : "Não"}
+              </p>
+            </>
+          )}
           {userType === "PF" && (
             <div className="media-avaliacao">
               <h3>Média das Avaliações:</h3>
-              <Stars rating={Math.round(mediaAvaliacao)} />
-              <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+              {mediaAvaliacao !== null ? (
+                <>
+                  <Stars rating={Math.round(mediaAvaliacao)} />
+                  <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+                </>
+              ) : (
+                <p>Ainda não avaliado</p>
+              )}
               <button
                 onClick={handleModalToggle}
                 className="ver-avaliacoes-button"
@@ -118,55 +152,82 @@ const Perfil = () => {
         <form onSubmit={handleUpdate}>
           <h2>Editar Perfil</h2>
           {error && <p className="error-message">{error}</p>}
-          <input
-            type="text"
-            placeholder="Nome"
-            value={novoNome}
-            onChange={(e) => setNovoNome(e.target.value)}
-          />
-          <input
-            type="text"
-            placeholder="Telefone"
-            value={telefone}
-            onChange={(e) => setTelefone(e.target.value)}
-          />
-          <input
-            type="password"
-            placeholder="Senha"
-            value={senha}
-            onChange={(e) => setSenha(e.target.value)}
-          />
-          <textarea
-            placeholder="Descrição"
-            value={descricao}
-            onChange={(e) => setDescricao(e.target.value)}
-          ></textarea>
           <label>
-            Categoria:
-            <select
-              value={categoria}
-              onChange={(e) => setCategoria(e.target.value)}
-            >
-              <option value="">Selecione a Categoria</option>
-              <option value="Garçom">Garçom</option>
-              <option value="Cozinheiro">Cozinheiro</option>
-              <option value="Atendente">Atendente</option>
-              <option value="Chefe de Cozinha">Chefe de Cozinha</option>
-              <option value="Sushiman">Sushiman</option>
-              <option value="Pizzaiolo">Pizzaiolo</option>
-              <option value="Churrasqueiro">Churrasqueiro</option>
-              <option value="Auxiliar de Cozinha">Auxiliar de Cozinha</option>
-              <option value="Entregador">Entregador</option>
-            </select>
-          </label>
-          <label>
-            Disponível:
+            Nome:
             <input
-              type="checkbox"
-              checked={disponivel}
-              onChange={(e) => setDisponivel(e.target.checked)}
+              type="text"
+              placeholder="Nome"
+              value={novoNome}
+              onChange={(e) => setNovoNome(e.target.value)}
             />
           </label>
+          <label>
+            Telefone:
+            <input
+              type="text"
+              placeholder="Telefone"
+              value={telefone}
+              onChange={(e) => setTelefone(e.target.value)}
+            />
+          </label>
+          <label>
+            Senha:
+            <input
+              type="password"
+              placeholder="Senha"
+              value={senha}
+              onChange={(e) => setSenha(e.target.value)}
+            />
+          </label>
+          {userType === "PF" && (
+            <>
+              <label>
+                Idade:
+                <input
+                  type="number"
+                  placeholder="Idade"
+                  value={idade}
+                  onChange={(e) => setIdade(e.target.value)}
+                />
+              </label>
+              <label>
+                Descrição:
+                <textarea
+                  placeholder="Descrição"
+                  value={descricao}
+                  onChange={(e) => setDescricao(e.target.value)}
+                ></textarea>
+              </label>
+              <label>
+                Categoria:
+                <select
+                  value={categoria}
+                  onChange={(e) => setCategoria(e.target.value)}
+                >
+                  <option value="">Selecione a Categoria</option>
+                  <option value="Garçom">Garçom</option>
+                  <option value="Cozinheiro">Cozinheiro</option>
+                  <option value="Atendente">Atendente</option>
+                  <option value="Chefe de Cozinha">Chefe de Cozinha</option>
+                  <option value="Sushiman">Sushiman</option>
+                  <option value="Pizzaiolo">Pizzaiolo</option>
+                  <option value="Churrasqueiro">Churrasqueiro</option>
+                  <option value="Auxiliar de Cozinha">
+                    Auxiliar de Cozinha
+                  </option>
+                  <option value="Entregador">Entregador</option>
+                </select>
+              </label>
+              <label>
+                Disponível:
+                <input
+                  type="checkbox"
+                  checked={disponivel}
+                  onChange={(e) => setDisponivel(e.target.checked)}
+                />
+              </label>
+            </>
+          )}
           <button type="submit">Salvar</button>
           <button type="button" onClick={handleCancelEdit}>
             Cancelar

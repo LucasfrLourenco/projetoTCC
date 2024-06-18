@@ -96,7 +96,7 @@
 }
 
 .ver-avaliacoes-button {
-  background-color: #007bff;
+  background-color: #ff9500;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -106,5 +106,15 @@
 }
 
 .ver-avaliacoes-button:hover {
-  background-color: #0056b3;
+  background-color: #744000;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 }

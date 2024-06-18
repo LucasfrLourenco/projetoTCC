@@ -1,12 +1,20 @@
 .stars {
   display: flex;
-  font-size: 20px;
+  font-size: 24px;
 }
 
-.filled {
+.star {
+  color: lightgray;
+}
+
+.star.filled {
   color: gold;
 }
 
-.empty {
+.star.half {
+  color: gold;
+}
+
+.star.empty {
   color: lightgray;
 }
