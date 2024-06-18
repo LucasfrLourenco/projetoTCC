@@ -35,14 +35,30 @@
   font-size: 24px;
   color: #333;
   margin: 20px;
+  text-align: center;
 }
 
 .trabalhador-card p {
   font-size: 18px;
   color: #666;
-  margin: 10px 20px;
+  margin: 30px 30px;
 }
 
 .trabalhador-card:hover {
   background-color: #f0f0f0;
+}
+
+.usuario-item {
+  margin-bottom: 20px;
+}
+
+.usuario-item h3 {
+  margin-top: 0;
+}
+
+.usuario-item img {
+  max-width: 100px;
+  height: auto;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }

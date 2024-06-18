@@ -24,7 +24,7 @@ const Cadastro = () => {
       const data = {
         nome,
         cpfCnpj,
-        telefone,
+        telefone: telefone.replace(/\D/g, ""), // Remove máscara antes de enviar
         email,
         senha,
         tipo,
@@ -55,7 +55,7 @@ const Cadastro = () => {
       setErroCpfCnpj("");
     }
 
-    if (!/^\d{10,11}$/.test(telefone)) {
+    if (!/^\(\d{2}\) \d{5}-\d{4}$/.test(telefone)) {
       setErroTelefone("Telefone inválido");
       valid = false;
     } else {
@@ -99,6 +99,23 @@ const Cadastro = () => {
     }
   };
 
+  const handleChangeTelefone = (e) => {
+    const valor = e.target.value.replace(/\D/g, ""); // Remove caracteres não numéricos
+    let telefoneFormatado = valor;
+
+    if (valor.length > 2) {
+      telefoneFormatado = `(${valor.slice(0, 2)}) ${valor.slice(2, 7)}`;
+    }
+    if (valor.length > 7) {
+      telefoneFormatado = `(${valor.slice(0, 2)}) ${valor.slice(
+        2,
+        7
+      )}-${valor.slice(7, 11)}`;
+    }
+
+    setTelefone(telefoneFormatado);
+  };
+
   return (
     <div className="input-container">
       <h2>Cadastre-se</h2>
@@ -129,7 +146,7 @@ const Cadastro = () => {
         type="tel"
         placeholder="Telefone"
         value={telefone}
-        onChange={(e) => setTelefone(e.target.value)}
+        onChange={handleChangeTelefone}
         className="input-field"
       />
       {erroTelefone && <p className="error-message">{erroTelefone}</p>}

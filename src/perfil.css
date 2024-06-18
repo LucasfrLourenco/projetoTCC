@@ -87,3 +87,9 @@
 .perfil-container input[type="checkbox"]:checked + label:after {
   content: "\2713";
 }
+
+.perfil-container img {
+  max-width: 300px; /* Defina o tamanho máximo desejado */
+  height: auto;
+  margin-bottom: 20px;
+}

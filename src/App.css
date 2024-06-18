@@ -57,3 +57,14 @@ body {
   color: #c98a15;
   outline: none;
 }
+
+.footer {
+  background-color: rgba(0, 0, 0, 0.8); /* Fundo preto de leve */
+  color: white;
+  text-align: center;
+  padding: 10px 0;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  margin-top: auto; /* Isso garante que o footer fique na parte inferior da página */
+}
