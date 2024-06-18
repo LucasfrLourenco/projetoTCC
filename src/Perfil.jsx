@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
 import Stars from "./Stars";
+import Modal from "./Modal";
 import "./perfil.css";
 
 const Perfil = () => {
@@ -15,6 +16,8 @@ const Perfil = () => {
   const [error, setError] = useState(null);
   const [editMode, setEditMode] = useState(false);
   const [mediaAvaliacao, setMediaAvaliacao] = useState(0);
+  const [avaliacoes, setAvaliacoes] = useState([]);
+  const [showModal, setShowModal] = useState(false);
   const { userType } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
@@ -39,6 +42,12 @@ const Perfil = () => {
             `http://localhost:3001/avaliacoes/media/${id}`
           );
           setMediaAvaliacao(mediaResponse.data);
+
+          // Fetch todas as avaliações
+          const avaliacoesResponse = await axios.get(
+            `http://localhost:3001/avaliacoes/${id}`
+          );
+          setAvaliacoes(avaliacoesResponse.data);
         }
       } catch (error) {
         console.error("Erro ao carregar perfil", error);
@@ -76,6 +85,10 @@ const Perfil = () => {
     setEditMode(false); // Cancelar edição e voltar para o modo de visualização
   };
 
+  const handleModalToggle = () => {
+    setShowModal(!showModal);
+  };
+
   return (
     <div className="perfil-container">
       {!editMode ? (
@@ -91,6 +104,12 @@ const Perfil = () => {
               <h3>Média das Avaliações:</h3>
               <Stars rating={Math.round(mediaAvaliacao)} />
               <p>{mediaAvaliacao.toFixed(1)} estrelas</p>
+              <button
+                onClick={handleModalToggle}
+                className="ver-avaliacoes-button"
+              >
+                Ver Avaliações
+              </button>
             </div>
           )}
           <button onClick={handleEditClick}>Editar</button>
@@ -154,6 +173,17 @@ const Perfil = () => {
           </button>
         </form>
       )}
+      <Modal show={showModal} onClose={handleModalToggle}>
+        <h2>Avaliações</h2>
+        {avaliacoes.map((avaliacao, index) => (
+          <div key={index} className="avaliacao">
+            <Stars rating={avaliacao.nota} />
+            <p>
+              <strong>{avaliacao.avaliador}:</strong> {avaliacao.comentario}
+            </p>
+          </div>
+        ))}
+      </Modal>
     </div>
   );
 };
