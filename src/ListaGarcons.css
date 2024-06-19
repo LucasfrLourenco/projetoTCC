@@ -66,8 +66,9 @@
 
 .filtros {
   display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
+  gap: 4px;
+  margin-bottom: 40px;
+  margin-top: 0;
 }
 
 .filtro-input {
