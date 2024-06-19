@@ -1,4 +1,3 @@
-// App.js
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import ListaGarcons from "./ListaGarcons";
@@ -28,8 +27,7 @@ function App() {
               <Route
                 path="/trabalhador/:id"
                 element={<DetalhesTrabalhador />}
-              />{" "}
-              {/* Rota de detalhes */}
+              />
               <Route path="/" element={<ListaGarcons />} />
             </Routes>
           </main>

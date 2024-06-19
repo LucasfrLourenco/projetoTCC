@@ -77,9 +77,13 @@ const DetalhesTrabalhador = () => {
         <p className="trabalhador-categoria">
           Categoria: {trabalhador.categoria}
         </p>
-        <p className="trabalhador-descricao">
-          Descrição: {trabalhador.descricao}
-        </p>
+        {trabalhador.descricao ? (
+          <p className="trabalhador-descricao">
+            Descrição: {trabalhador.descricao}
+          </p>
+        ) : (
+          <p>Sem descrição</p>
+        )}
         {trabalhador.disponivel ? (
           <p style={{ color: "green" }} className="trabalhador-disponivel">
             Disponível
@@ -101,14 +105,18 @@ const DetalhesTrabalhador = () => {
       </div>
       <div className="avaliacoes-container">
         <h2>Avaliações</h2>
-        {avaliacoesExibidas.map((avaliacao, index) => (
-          <div key={index} className="avaliacao">
-            <Stars rating={avaliacao.nota} />
-            <p>
-              <strong>{avaliacao.avaliador}:</strong> {avaliacao.comentario}
-            </p>
-          </div>
-        ))}
+        {avaliacoes.length > 0 ? (
+          avaliacoesExibidas.map((avaliacao, index) => (
+            <div key={index} className="avaliacao">
+              <Stars rating={avaliacao.nota} />
+              <p>
+                <strong>{avaliacao.avaliador}:</strong> {avaliacao.comentario}
+              </p>
+            </div>
+          ))
+        ) : (
+          <p>Sem avaliações</p>
+        )}
         {avaliacoes.length > 2 && (
           <button onClick={() => setMostrarMais(!mostrarMais)}>
             {mostrarMais ? "Mostrar Menos" : "Mostrar Mais"}

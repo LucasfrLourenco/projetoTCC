@@ -131,7 +131,8 @@ app.get("/perfil", verificarToken, (req, res) => {
 });
 
 app.put("/perfil", verificarToken, async (req, res) => {
-  const { telefone, senha, descricao, disponivel, categoria } = req.body;
+  const { telefone, senha, descricao, disponivel, categoria, nome, idade } =
+    req.body;
   const userId = req.userId;
 
   try {
@@ -158,6 +159,14 @@ app.put("/perfil", verificarToken, async (req, res) => {
     if (categoria) {
       sql += "categoria = ?, ";
       params.push(categoria);
+    }
+    if (nome) {
+      sql += "nome = ?, ";
+      params.push(nome);
+    }
+    if (idade) {
+      sql += "idade = ?, ";
+      params.push(idade);
     }
 
     // Remove a última vírgula e espaço do SQL
@@ -259,6 +268,21 @@ app.get("/avaliacoes/media/:trabalhador_id", (req, res) => {
       return res.status(500).send("Erro ao calcular média das avaliações");
     }
     res.status(200).json(result[0].media || 0); // Retornar 0 se não houver avaliações
+  });
+});
+
+app.get("/me", verificarToken, (req, res) => {
+  const userId = req.userId;
+  const sql = "SELECT tipo FROM usuarios WHERE id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error("Erro ao obter informações do usuário", err);
+      return res.status(500).send("Erro ao obter informações do usuário");
+    }
+    if (result.length === 0) {
+      return res.status(404).send("Usuário não encontrado");
+    }
+    res.status(200).json({ tipo: result[0].tipo });
   });
 });
 
