@@ -9,7 +9,7 @@
 }
 
 .filled {
-  color: gold;
+  color: rgb(204, 139, 41);
 }
 
 .empty {
@@ -27,7 +27,7 @@ textarea {
 
 .buttonAval {
   margin-top: 10px;
-  background-color: #007bff;
+  background-color: #ce821e;
   color: white;
   padding: 10px 20px;
   border: none;
@@ -36,5 +36,5 @@ textarea {
 }
 
 button:hover {
-  background-color: #0056b3;
+  background-color: #523913;
 }

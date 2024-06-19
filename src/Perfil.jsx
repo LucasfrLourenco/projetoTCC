@@ -142,7 +142,7 @@ const Perfil = () => {
                 onClick={handleModalToggle}
                 className="ver-avaliacoes-button"
               >
-                Ver Avaliações
+                Avaliações
               </button>
             </div>
           )}

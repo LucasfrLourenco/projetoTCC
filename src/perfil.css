@@ -3,10 +3,9 @@
   margin: 0 auto;
   margin-bottom: 70px;
   padding: 20px;
-  border: 2px solid #5a3604;
   border-radius: 8px;
-  background-color: #e8e0d6;
-  color: black;
+  background-color: #ebc6a4;
+  color: rgb(0, 0, 0);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -38,8 +37,8 @@
 
 .perfil-container button:hover,
 .ver-avaliacoes-button:hover {
-  background-color: #5a3604;
-  color: #ffffff;
+  background-color: #9e6112;
+  color: #000000;
 }
 
 .perfil-container form {
@@ -63,7 +62,7 @@
 .perfil-container input:focus,
 .perfil-container textarea:focus,
 .perfil-container select:focus {
-  border-color: #c98a15; /* Borda laranja quando focado */
+  border-color: #795d10; /* Borda laranja quando focado */
   outline: none;
 }
 
@@ -87,13 +86,13 @@
 }
 
 .perfil-container .media-avaliacao h3 {
-  color: #000000;
+  color: #ffffff;
   font-size: 20px;
 }
 
 .perfil-container .media-avaliacao p {
   margin: 5px 0;
-  color: #5a3604;
+  color: #ffffff;
 }
 
 .perfil-container .avaliacao {
