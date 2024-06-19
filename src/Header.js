@@ -2,6 +2,7 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
+import "./header.css";
 
 const Header = () => {
   const { isAuthenticated, logout } = useContext(AuthContext);
@@ -12,23 +13,23 @@ const Header = () => {
         <Link to="/">Garçonline</Link>
       </h1>
       <nav className="header-nav">
-        <ul>
+        <ul className="nav-list">
           {!isAuthenticated ? (
             <>
               <li>
-                <Link to="/login">Login</Link>
+                <Link to="/login">LOGIN</Link>
               </li>
               <li>
-                <Link to="/cadastro">Cadastrar</Link>
+                <Link to="/cadastro">CADASTRE-SE</Link>
               </li>
             </>
           ) : (
             <>
               <li>
-                <Link to="/perfil">Perfil</Link>
+                <Link to="/perfil">PERFIL</Link>
               </li>
               <li>
-                <button onClick={logout}>Logout</button>
+                <button className="logout-button" onClick={logout}>SAIR</button>
               </li>
             </>
           )}
