@@ -1,7 +1,8 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
+import axios from "axios";
 import { Link } from "react-router-dom";
 import "./ListaGarcons.css"; // Importa o arquivo CSS
+import defaultImage from "./imagens/default.png";
 
 const ListaGarcons = () => {
   const [trabalhadores, setTrabalhadores] = useState([]);
@@ -76,6 +77,22 @@ const ListaGarcons = () => {
         {trabalhadoresFiltrados.map((trabalhador) => (
           <li key={trabalhador.id} className="trabalhador-card">
             <Link to={`/trabalhador/${trabalhador.id}`}>
+              {trabalhador.imagem ? (
+                <img
+                  src={`http://localhost:3001/imagens/${trabalhador.imagem}`}
+                  alt="Imagem do Trabalhador"
+                  onError={(e) => {
+                    e.target.src = defaultImage; // Carregar imagem padrão em caso de erro
+                  }}
+                  className="trabalhador-imagem"
+                />
+              ) : (
+                <img
+                  src={defaultImage}
+                  alt="Imagem Padrão"
+                  className="trabalhador-imagem"
+                />
+              )}
               <h1 className="trabalhador-nome">{trabalhador.nome}</h1>
               <p className="trabalhador-idade">
                 Idade: {trabalhador.idade} Anos

@@ -1,7 +1,7 @@
 .perfil-container {
   max-width: 600px;
   margin: 0 auto;
-  margin-bottom: 70px;
+  margin-bottom: 100px;
   padding: 20px;
   border: 2px solid #5a3604;
   border-radius: 8px;
@@ -109,4 +109,11 @@ textarea,
 select {
   width: 100%;
   box-sizing: border-box;
+}
+
+.perfil-imagem {
+  width: 200px;
+  height: 200px;
+  object-fit: cover;
+  margin-bottom: 20px;
 }

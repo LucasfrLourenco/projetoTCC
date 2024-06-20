@@ -3,12 +3,17 @@ const mysql = require("mysql");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const multer = require("multer");
+const path = require("path");
 
 const app = express();
 const PORT = 3001;
 
 app.use(express.json());
 app.use(cors());
+
+// Servir arquivos estáticos do diretório 'imagens'
+app.use("/imagens", express.static(path.join(__dirname, "imagens")));
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -39,6 +44,35 @@ function verificarToken(req, res, next) {
     next();
   });
 }
+
+// Configuração do multer para armazenar imagens no diretório 'imagens'
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "imagens/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+// Filtro para aceitar apenas arquivos de imagem
+const fileFilter = (req, file, cb) => {
+  const fileTypes = /jpeg|jpg|png|gif/;
+  const extname = fileTypes.test(path.extname(file.originalname).toLowerCase());
+  const mimetype = fileTypes.test(file.mimetype);
+
+  if (mimetype && extname) {
+    return cb(null, true);
+  } else {
+    cb("Erro: Apenas arquivos de imagem são permitidos!");
+  }
+};
+
+const upload = multer({
+  storage: storage,
+  fileFilter: fileFilter,
+  limits: { fileSize: 2 * 1024 * 1024 }, // Limite de 2MB
+});
 
 // Rota de cadastro com validação de usuário existente
 app.post("/cadastro", async (req, res) => {
@@ -130,68 +164,78 @@ app.get("/perfil", verificarToken, (req, res) => {
   });
 });
 
-app.put("/perfil", verificarToken, async (req, res) => {
-  const { telefone, senha, descricao, disponivel, categoria, nome, idade } =
-    req.body;
-  const userId = req.userId;
+app.put(
+  "/perfil",
+  verificarToken,
+  upload.single("imagem"),
+  async (req, res) => {
+    const { telefone, senha, descricao, disponivel, categoria, nome, idade } =
+      req.body;
+    const userId = req.userId;
+    const imagem = req.file ? req.file.filename : null;
 
-  try {
-    let sql = "UPDATE usuarios SET ";
-    const params = [];
+    try {
+      let sql = "UPDATE usuarios SET ";
+      const params = [];
 
-    if (telefone) {
-      sql += "telefone = ?, ";
-      params.push(telefone);
-    }
-    if (senha) {
-      const hashedSenha = await bcrypt.hash(senha, 10);
-      sql += "senha = ?, ";
-      params.push(hashedSenha);
-    }
-    if (descricao) {
-      sql += "descricao = ?, ";
-      params.push(descricao);
-    }
-    if (disponivel !== undefined) {
-      sql += "disponivel = ?, ";
-      params.push(disponivel);
-    }
-    if (categoria) {
-      sql += "categoria = ?, ";
-      params.push(categoria);
-    }
-    if (nome) {
-      sql += "nome = ?, ";
-      params.push(nome);
-    }
-    if (idade) {
-      sql += "idade = ?, ";
-      params.push(idade);
-    }
-
-    // Remove a última vírgula e espaço do SQL
-    sql = sql.slice(0, -2);
-
-    sql += " WHERE id = ?";
-    params.push(userId);
-
-    db.query(sql, params, (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send("Erro ao atualizar perfil do usuário");
+      if (telefone) {
+        sql += "telefone = ?, ";
+        params.push(telefone);
       }
-      res.status(200).send("Perfil do usuário atualizado com sucesso");
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).send("Erro ao atualizar perfil do usuário");
+      if (senha) {
+        const hashedSenha = await bcrypt.hash(senha, 10);
+        sql += "senha = ?, ";
+        params.push(hashedSenha);
+      }
+      if (descricao) {
+        sql += "descricao = ?, ";
+        params.push(descricao);
+      }
+      if (disponivel !== undefined) {
+        sql += "disponivel = ?, ";
+        params.push(disponivel);
+      }
+      if (categoria) {
+        sql += "categoria = ?, ";
+        params.push(categoria);
+      }
+      if (nome) {
+        sql += "nome = ?, ";
+        params.push(nome);
+      }
+      if (idade) {
+        sql += "idade = ?, ";
+        params.push(idade);
+      }
+      if (imagem) {
+        sql += "imagem = ?, ";
+        params.push(imagem);
+      }
+
+      // Remove a última vírgula e espaço do SQL
+      sql = sql.slice(0, -2);
+
+      sql += " WHERE id = ?";
+      params.push(userId);
+
+      db.query(sql, params, (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).send("Erro ao atualizar perfil do usuário");
+        }
+        res.status(200).send("Perfil do usuário atualizado com sucesso");
+      });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send("Erro ao atualizar perfil do usuário");
+    }
   }
-});
+);
 
 // Rota para obter lista de trabalhadores
 app.get("/trabalhadores", (req, res) => {
   const sql =
-    "SELECT id, nome, idade, telefone, categoria, descricao FROM usuarios WHERE tipo = 'PF' AND disponivel = 1";
+    "SELECT id, nome, idade, telefone, categoria, descricao, imagem FROM usuarios WHERE tipo = 'PF' AND disponivel = 1";
   db.query(sql, (err, result) => {
     if (err) {
       console.error("Erro ao obter a lista de trabalhadores:", err);
@@ -205,7 +249,7 @@ app.get("/trabalhadores", (req, res) => {
 app.get("/trabalhador/:id", (req, res) => {
   const userId = req.params.id;
   const sql =
-    "SELECT id, nome, email, cpfCnpj, idade, telefone, categoria, descricao, disponivel FROM usuarios WHERE id = ?";
+    "SELECT id, nome, email, cpfCnpj, idade, telefone, categoria, descricao, disponivel, imagem FROM usuarios WHERE id = ?";
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error("Erro ao obter detalhes do trabalhador:", err);

@@ -19,6 +19,9 @@ const Perfil = () => {
   const [mediaAvaliacao, setMediaAvaliacao] = useState(null);
   const [avaliacoes, setAvaliacoes] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [imagem, setImagem] = useState(null); // Estado para armazenar a imagem
+  const [imagemUrl, setImagemUrl] = useState(null); // Para visualização da imagem
+
   const { userType } = useContext(AuthContext);
   const token = localStorage.getItem("token");
 
@@ -28,8 +31,16 @@ const Perfil = () => {
         const response = await axios.get("http://localhost:3001/perfil", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const { telefone, descricao, disponivel, categoria, nome, idade, id } =
-          response.data;
+        const {
+          telefone,
+          descricao,
+          disponivel,
+          categoria,
+          nome,
+          idade,
+          id,
+          imagem,
+        } = response.data;
         setTelefone(telefone);
         setDescricao(descricao);
         setDisponivel(disponivel);
@@ -37,15 +48,14 @@ const Perfil = () => {
         setNomePerfil(nome);
         setNovoNome(nome);
         setIdade(idade);
+        setImagemUrl(imagem ? `http://localhost:3001/imagens/${imagem}` : null);
 
-        // Fetch media das avaliações
         if (userType === "PF") {
           const mediaResponse = await axios.get(
             `http://localhost:3001/avaliacoes/media/${id}`
           );
           setMediaAvaliacao(mediaResponse.data);
 
-          // Fetch todas as avaliações
           const avaliacoesResponse = await axios.get(
             `http://localhost:3001/avaliacoes/${id}`
           );
@@ -64,20 +74,22 @@ const Perfil = () => {
     e.preventDefault();
     setError(null);
 
+    const formData = new FormData();
+    formData.append("telefone", telefone);
+    formData.append("senha", senha);
+    formData.append("descricao", descricao);
+    formData.append("disponivel", disponivel);
+    formData.append("categoria", categoria);
+    formData.append("nome", novoNome);
+    formData.append("idade", idade);
+    if (imagem) {
+      formData.append("imagem", imagem);
+    }
+
     try {
-      await axios.put(
-        "http://localhost:3001/perfil",
-        {
-          telefone,
-          senha,
-          descricao,
-          disponivel,
-          categoria,
-          nome: novoNome,
-          idade,
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await axios.put("http://localhost:3001/perfil", formData, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       alert("Perfil atualizado com sucesso!");
       setNomePerfil(novoNome);
       setEditMode(false);
@@ -88,15 +100,20 @@ const Perfil = () => {
   };
 
   const handleEditClick = () => {
-    setEditMode(true); // Ativar modo de edição ao clicar no botão de editar
+    setEditMode(true);
   };
 
   const handleCancelEdit = () => {
-    setEditMode(false); // Cancelar edição e voltar para o modo de visualização
+    setEditMode(false);
   };
 
   const handleModalToggle = () => {
     setShowModal(!showModal);
+  };
+
+  const handleImagemChange = (e) => {
+    setImagem(e.target.files[0]);
+    setImagemUrl(URL.createObjectURL(e.target.files[0])); // Atualiza a visualização da imagem
   };
 
   return (
@@ -104,6 +121,13 @@ const Perfil = () => {
       {!editMode ? (
         <div>
           <h2>Perfil de {nomePerfil}</h2>
+          {imagemUrl && (
+            <img
+              src={imagemUrl}
+              alt="Imagem do Perfil"
+              className="perfil-imagem"
+            />
+          )}
           {error && <p className="error-message">{error}</p>}
           <p>
             <strong>Nome:</strong> {nomePerfil}
@@ -114,9 +138,9 @@ const Perfil = () => {
           {userType === "PF" && (
             <>
               <p>
-                <p>
-                  <strong>Idade:</strong> {idade}
-                </p>
+                <strong>Idade:</strong> {idade}
+              </p>
+              <p>
                 <strong>Descrição:</strong> {descricao}
               </p>
               <p>
@@ -151,6 +175,13 @@ const Perfil = () => {
       ) : (
         <form onSubmit={handleUpdate}>
           <h2>Editar Perfil</h2>
+          {imagemUrl && (
+            <img
+              src={imagemUrl}
+              alt="Imagem do Perfil"
+              className="perfil-imagem"
+            />
+          )}
           {error && <p className="error-message">{error}</p>}
           <label>
             Nome:
@@ -197,6 +228,10 @@ const Perfil = () => {
                   value={descricao}
                   onChange={(e) => setDescricao(e.target.value)}
                 ></textarea>
+              </label>
+              <label>
+                Imagem:
+                <input type="file" onChange={handleImagemChange} />
               </label>
               <label>
                 Categoria:

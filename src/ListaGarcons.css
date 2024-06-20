@@ -1,7 +1,7 @@
 .trabalhadores-container {
   max-width: 800px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 50px;
 }
 
 .trabalhadores-list {
@@ -79,4 +79,12 @@
 .filtro-select {
   padding: 0.5rem;
   font-size: 1rem;
+}
+
+.trabalhador-imagem {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 10px;
 }
