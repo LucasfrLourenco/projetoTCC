@@ -50,6 +50,14 @@ const ListaGarcons = () => {
     );
   });
 
+  const getImagemUrl = (nomeImagem) => {
+    // Verifica se o nome da imagem está presente na lista de trabalhadores
+    if (nomeImagem && trabalhadores.find((t) => t.imagem === nomeImagem)) {
+      return `http://localhost:3001/imagens/${nomeImagem}`;
+    }
+    return defaultImage; // Retorna a imagem padrão se a imagem não existir
+  };
+
   return (
     <div className="trabalhadores-container">
       <div className="filtros">
@@ -79,11 +87,12 @@ const ListaGarcons = () => {
             <Link to={`/trabalhador/${trabalhador.id}`}>
               {trabalhador.imagem ? (
                 <img
-                  src={`http://localhost:3001/imagens/${trabalhador.imagem}`}
-                  alt="Imagem do Trabalhador"
+                  src={getImagemUrl(trabalhador.imagem)}
                   onError={(e) => {
+                    e.target.onerror = null; // Limpar o evento para evitar loops
                     e.target.src = defaultImage; // Carregar imagem padrão em caso de erro
                   }}
+                  alt="Imagem do Trabalhador"
                   className="trabalhador-imagem"
                 />
               ) : (
