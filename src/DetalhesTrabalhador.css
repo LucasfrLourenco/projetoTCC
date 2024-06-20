@@ -37,10 +37,10 @@
 .detalhes-container {
   max-width: 600px;
   margin: auto;
-  border: 1px solid #ccc;
+  border: 1px solid #532f06;
   border-radius: 5px;
   padding: 20px;
-  background-color: #f9f9f9;
+  background-color: #ebc6a4;
   margin-bottom: 90px;
 }
 
@@ -66,4 +66,27 @@
   margin-bottom: 10px;
   border-radius: 5px;
   background-color: #f9f9f9;
+}
+
+.toggle-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: bold;
+  color: #000000;
+  background-color: #ff9900;
+  border: none;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-button:hover {
+  background-color: #532f06;
+  transform: translateY(-2px);
+}
+
+.toggle-button:focus {
+  outline: none;
+ 
 }
