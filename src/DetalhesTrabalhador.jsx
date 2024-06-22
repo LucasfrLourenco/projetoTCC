@@ -134,7 +134,7 @@ const DetalhesTrabalhador = () => {
           <p>Sem avaliações</p>
         )}
         {avaliacoes.length > 2 && (
-          <button onClick={() => setMostrarMais(!mostrarMais)}>
+          <button className="toggle-button"  onClick={() => setMostrarMais(!mostrarMais)}>
             {mostrarMais ? "Mostrar Menos" : "Mostrar Mais"}
           </button>
         )}

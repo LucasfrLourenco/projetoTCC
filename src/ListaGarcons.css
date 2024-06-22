@@ -25,7 +25,7 @@
 }
 
 .trabalhador-card:hover {
-  transform: translateY(-10px);
+  transform: translateY(-10px); 
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
 }
 
