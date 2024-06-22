@@ -61,6 +61,15 @@ const DetalhesTrabalhador = () => {
     return <p>Carregando...</p>;
   }
 
+  const enviarWhatsApp = () => {
+    const telefone = trabalhador.telefone.replace(/\D/g, ""); // Remove caracteres não numéricos
+    const mensagem = `Olá, ${trabalhador.nome}! eu vi seu perfil no Garçonline e me interessei. Gostaria de conversar com você. Esta disponível?`;
+    const url = `https://wa.me/${telefone}?text=${encodeURIComponent(
+      mensagem
+    )}`;
+    window.open(url, "_blank");
+  };
+
   return (
     <div className="detalhes-container">
       {trabalhador.imagem && (
@@ -72,8 +81,15 @@ const DetalhesTrabalhador = () => {
       )}
       <div className="detalhes-info">
         <h1 className="trabalhador-nome">{trabalhador.nome}</h1>
-        <p className="trabalhador-idade">Idade: {trabalhador.idade} Anos</p>
-        <p className="trabalhador-telefone">Telefone: {trabalhador.telefone}</p>
+        <p className="trabalhador-idade">Idade: {trabalhador.idade} anos</p>
+        <p className="trabalhador-telefone">
+          Telefone: {trabalhador.telefone}
+          {isAuthenticated && userType === "PJ" && (
+            <button className="whatsapp-button" onClick={enviarWhatsApp}>
+              Enviar Mensagem
+            </button>
+          )}
+        </p>
         <p className="trabalhador-categoria">
           Categoria: {trabalhador.categoria}
         </p>
@@ -118,7 +134,7 @@ const DetalhesTrabalhador = () => {
           <p>Sem avaliações</p>
         )}
         {avaliacoes.length > 2 && (
-          <button className="toggle-button" onClick={() => setMostrarMais(!mostrarMais)}>
+          <button onClick={() => setMostrarMais(!mostrarMais)}>
             {mostrarMais ? "Mostrar Menos" : "Mostrar Mais"}
           </button>
         )}

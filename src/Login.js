@@ -20,8 +20,8 @@ const Login = () => {
         email,
         senha,
       });
-      const { token, tipo } = response.data; // Assumindo que o tipo do usuário é retornado
-      login(token, tipo);
+      const { token, tipo, userId } = response.data; // Assumindo que o tipo e userId do usuário são retornados
+      login(token, tipo, userId);
       navigate("/perfil");
     } catch (error) {
       console.error("Erro ao fazer login", error);

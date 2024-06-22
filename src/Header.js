@@ -1,11 +1,10 @@
-// Header.js
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { AuthContext } from "./AuthContext";
 import "./header.css";
 
 const Header = () => {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { isAuthenticated, userType, logout } = useContext(AuthContext);
 
   return (
     <header className="App-header">
@@ -25,11 +24,28 @@ const Header = () => {
             </>
           ) : (
             <>
+              {userType !== "PJ" && ( // Verifica se não é um usuário do tipo PJ
+                <li>
+                  <Link to="/vagas">VAGAS</Link>
+                </li>
+              )}
+              {userType === "PJ" && (
+                <ul>
+                  <li>
+                    <Link to="/anunciar-vaga">ANUNCIAR VAGA</Link>
+                  </li>
+                  <li>
+                    <Link to="/meus-anuncios">MEUS ANÚNCIOS</Link>
+                  </li>
+                </ul>
+              )}
               <li>
                 <Link to="/perfil">PERFIL</Link>
               </li>
               <li>
-                <button className="logout-button" onClick={logout}>SAIR</button>
+                <button className="logout-button" onClick={logout}>
+                  SAIR
+                </button>
               </li>
             </>
           )}
