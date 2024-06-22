@@ -1,41 +1,7 @@
-/* Exemplo de CSS para Lista de Trabalhadores */
-.trabalhadores-container {
-  max-width: 800px;
-  margin: auto;
-}
+/* Estilos existentes */
 
-.trabalhadores-list {
-  list-style-type: none;
-  padding: 0;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 20px;
-}
-
-.trabalhador-card {
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  transition: transform 0.3s ease-in-out;
-}
-
-.trabalhador-card:hover {
-  transform: scale(1.05);
-}
-
-.trabalhador-imagem {
-  width: 100%;
-  height: auto;
-  border-radius: 5px 5px 0 0;
-}
-
-.trabalhador-info {
-  padding: 10px;
-}
-
-/* Exemplo de CSS para Detalhes do Trabalhador */
 .detalhes-container {
-  max-width: 600px;
+  max-width: 800px;
   margin: auto;
   border: 1px solid #532f06;
   border-radius: 5px;
@@ -88,5 +54,46 @@
 
 .toggle-button:focus {
   outline: none;
- 
+}
+
+.whatsapp-button {
+  margin-left: 10px;
+  padding: 5px 10px;
+  background-color: #25d366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.whatsapp-button:hover {
+  background-color: #22c35e;
+}
+
+/* Novos estilos para responsividade */
+
+@media (max-width: 768px) {
+  .detalhes-container {
+    padding: 10px;
+  }
+
+  .avaliacoes-container {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .detalhes-info {
+    text-align: center;
+  }
+
+  .trabalhador-imagem {
+    margin-bottom: 10px;
+  }
+
+  .toggle-button,
+  .whatsapp-button {
+    width: 100%;
+    margin-left: 0;
+  }
 }

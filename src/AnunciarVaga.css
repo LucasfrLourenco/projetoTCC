@@ -1,0 +1,39 @@
+/* Estilos para Anunciar Vaga */
+.anunciar-vaga-container {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+}
+
+.anunciar-vaga-container form div {
+  margin-bottom: 10px;
+}
+
+.anunciar-vaga-container label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.anunciar-vaga-container input,
+.anunciar-vaga-container textarea {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.anunciar-vaga-container button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.anunciar-vaga-container button:hover {
+  background-color: #218838;
+}

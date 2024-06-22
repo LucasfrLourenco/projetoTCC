@@ -6,6 +6,7 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userType, setUserType] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -17,11 +18,13 @@ export const AuthProvider = ({ children }) => {
         })
         .then((response) => {
           setIsAuthenticated(true);
-          setUserType(response.data.tipo); // Assumindo que a resposta inclui o tipo do usuário
+          setUserType(response.data.tipo);
+          setUserId(response.data.userId); // Assume que o backend retorna userId
         })
         .catch(() => {
           setIsAuthenticated(false);
           setUserType(null);
+          setUserId(null);
         })
         .finally(() => {
           setLoading(false);
@@ -31,21 +34,23 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  const login = (token, tipo) => {
+  const login = (token, tipo, id) => {
     localStorage.setItem("token", token);
     setIsAuthenticated(true);
     setUserType(tipo);
+    setUserId(id);
   };
 
   const logout = () => {
     localStorage.removeItem("token");
     setIsAuthenticated(false);
     setUserType(null);
+    setUserId(null);
   };
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, userType, login, logout, loading }}
+      value={{ isAuthenticated, userType, userId, login, logout, loading }}
     >
       {children}
     </AuthContext.Provider>

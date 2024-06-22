@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import "./ListaGarcons.css"; // Importa o arquivo CSS
-import defaultImage from "./imagens/default.png";
+import defaultImage from "./images/default.png";
 
 const ListaGarcons = () => {
   const [trabalhadores, setTrabalhadores] = useState([]);
@@ -51,11 +51,10 @@ const ListaGarcons = () => {
   });
 
   const getImagemUrl = (nomeImagem) => {
-    // Verifica se o nome da imagem está presente na lista de trabalhadores
     if (nomeImagem && trabalhadores.find((t) => t.imagem === nomeImagem)) {
       return `http://localhost:3001/imagens/${nomeImagem}`;
     }
-    return defaultImage; // Retorna a imagem padrão se a imagem não existir
+    return defaultImage;
   };
 
   return (
@@ -89,8 +88,8 @@ const ListaGarcons = () => {
                 <img
                   src={getImagemUrl(trabalhador.imagem)}
                   onError={(e) => {
-                    e.target.onerror = null; // Limpar o evento para evitar loops
-                    e.target.src = defaultImage; // Carregar imagem padrão em caso de erro
+                    e.target.onerror = null;
+                    e.target.src = defaultImage;
                   }}
                   alt="Imagem do Trabalhador"
                   className="trabalhador-imagem"
@@ -104,7 +103,7 @@ const ListaGarcons = () => {
               )}
               <h1 className="trabalhador-nome">{trabalhador.nome}</h1>
               <p className="trabalhador-idade">
-                Idade: {trabalhador.idade} Anos
+                Idade: {trabalhador.idade} anos
               </p>
               <p className="trabalhador-categoria">
                 Categoria: {trabalhador.categoria}

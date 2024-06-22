@@ -78,7 +78,7 @@ const Perfil = () => {
     formData.append("telefone", telefone);
     formData.append("senha", senha);
     formData.append("descricao", descricao);
-    formData.append("disponivel", disponivel);
+    formData.append("disponivel", disponivel ? 1 : 0); // Convertemos aqui
     formData.append("categoria", categoria);
     formData.append("nome", novoNome);
     formData.append("idade", idade);

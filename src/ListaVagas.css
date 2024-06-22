@@ -1,0 +1,39 @@
+/* Estilos para Lista de Vagas */
+.vagas-container {
+  max-width: 800px;
+  margin: auto;
+}
+
+.vagas-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+.vaga-card {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 10px;
+  background-color: #fff;
+}
+
+.vaga-card h3 {
+  margin: 0 0 10px;
+}
+
+.vaga-card p {
+  margin: 5px 0;
+}
+
+.contato-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.contato-button:hover {
+  background-color: #0056b3;
+}

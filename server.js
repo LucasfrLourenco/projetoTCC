@@ -330,6 +330,77 @@ app.get("/me", verificarToken, (req, res) => {
   });
 });
 
+// Rota para criar uma nova vaga
+app.post("/vagas", verificarToken, (req, res) => {
+  const { funcao, descricao, data_necessaria } = req.body;
+  const empresa_id = req.userId;
+
+  const sql =
+    "INSERT INTO vagas (empresa_id, funcao, descricao, data_necessaria) VALUES (?, ?, ?, ?)";
+  db.query(
+    sql,
+    [empresa_id, funcao, descricao, data_necessaria],
+    (err, result) => {
+      if (err) {
+        console.error("Erro ao criar vaga:", err);
+        return res.status(500).send("Erro ao criar vaga");
+      }
+      res.status(201).send("Vaga criada com sucesso");
+    }
+  );
+});
+
+// Rota para obter todas as vagas
+app.get("/vagas", (req, res) => {
+  const sql =
+    "SELECT v.*, u.nome AS empresa_nome FROM vagas v JOIN usuarios u ON v.empresa_id = u.id";
+  db.query(sql, (err, result) => {
+    if (err) {
+      console.error("Erro ao obter vagas:", err);
+      return res.status(500).send("Erro ao obter vagas");
+    }
+    res.status(200).json(result);
+  });
+});
+
+// Rota para obter os anúncios do usuário logado
+// Dentro da rota para obter os anúncios do usuário logado
+app.get("/vagas/meu-anuncio/:userId", (req, res) => {
+  const userId = req.params.userId;
+
+  const sql = "SELECT * FROM vagas WHERE empresa_id = ?";
+  db.query(sql, [userId], (err, result) => {
+    if (err) {
+      console.error("Erro ao buscar vagas do usuário:", err);
+      return res.status(500).send("Erro ao buscar vagas do usuário");
+    }
+    res.status(200).json(result);
+  });
+});
+
+// Rota para deletar uma vaga
+app.delete("/vagas/:id", verificarToken, (req, res) => {
+  const vagaId = req.params.id;
+  const sql = "DELETE FROM vagas WHERE id = ? AND empresa_id = ?";
+
+  db.query(sql, [vagaId, req.userId], (err, result) => {
+    if (err) {
+      console.error("Erro ao deletar vaga:", err);
+      return res.status(500).send("Erro ao deletar vaga");
+    }
+
+    if (result.affectedRows === 0) {
+      return res
+        .status(404)
+        .send(
+          "Vaga não encontrada ou você não tem permissão para deletar essa vaga"
+        );
+    }
+
+    res.status(200).send("Vaga deletada com sucesso");
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
