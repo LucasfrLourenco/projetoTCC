@@ -40,7 +40,7 @@ const Header = () => {
                 </ul>
               )}
               <li>
-                <Link to="/perfil">PERFIL</Link>
+                <Link to="/perfil">MEU PERFIL</Link>
               </li>
               <li>
                 <button className="logout-button" onClick={logout}>
