@@ -1,5 +1,3 @@
-// ListaVagas.js
-
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ListaVagas.css";
@@ -20,9 +18,12 @@ const ListaVagas = () => {
     fetchVagas();
   }, []);
 
-  const enviarMensagem = (empresaNome) => {
+  const enviarMensagem = (empresaNome, empresaTelefone) => {
+    const telefone = empresaTelefone.replace(/\D/g, ""); // Remove caracteres não numéricos
     const mensagem = `Olá, ${empresaNome}! Eu vi seu anúncio de vaga no Garçonline e estou interessado. Gostaria de conversar sobre a oportunidade.`;
-    const url = `https://wa.me/?text=${encodeURIComponent(mensagem)}`;
+    const url = `https://wa.me/${telefone}?text=${encodeURIComponent(
+      mensagem
+    )}`;
     window.open(url, "_blank");
   };
 
@@ -42,7 +43,9 @@ const ListaVagas = () => {
               <p>Empresa: {vaga.empresa_nome}</p>
               <button
                 className="contato-button"
-                onClick={() => enviarMensagem(vaga.empresa_nome)}
+                onClick={() =>
+                  enviarMensagem(vaga.empresa_nome, vaga.empresa_telefone)
+                }
               >
                 Entrar em Contato
               </button>

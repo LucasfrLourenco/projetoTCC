@@ -4,6 +4,11 @@
   margin: auto;
 }
 
+.vagas-container h2 {
+  color: white;
+  font-size: 30px;
+}
+
 .vagas-list {
   list-style-type: none;
   padding: 0;

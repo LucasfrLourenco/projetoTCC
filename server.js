@@ -352,8 +352,12 @@ app.post("/vagas", verificarToken, (req, res) => {
 
 // Rota para obter todas as vagas
 app.get("/vagas", (req, res) => {
-  const sql =
-    "SELECT v.*, u.nome AS empresa_nome FROM vagas v JOIN usuarios u ON v.empresa_id = u.id";
+  const sql = `
+    SELECT v.*, u.nome AS empresa_nome, u.telefone AS empresa_telefone 
+    FROM vagas v 
+    JOIN usuarios u ON v.empresa_id = u.id;
+  `;
+
   db.query(sql, (err, result) => {
     if (err) {
       console.error("Erro ao obter vagas:", err);
