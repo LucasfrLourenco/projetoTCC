@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import axios from "axios";
 import { AuthContext } from "./AuthContext";
+import "./MeusAnuncios.css";
 
 const MeusAnuncios = () => {
   const { userId, isAuthenticated } = useContext(AuthContext);
@@ -10,16 +11,13 @@ const MeusAnuncios = () => {
     const fetchMinhasVagas = async () => {
       try {
         const token = localStorage.getItem("token");
-        if (!userId) return; // Adicionado para evitar requisição sem userId
-        console.log("Token:", token); // Verifique o token
-        console.log("userId:", userId); // Verifique o userId
+        if (!userId) return;
         const response = await axios.get(
           `http://localhost:3001/vagas/meu-anuncio/${userId}`,
           {
             headers: { Authorization: `Bearer ${token}` },
           }
         );
-        console.log("Vagas recebidas:", response.data); // Verifique o resultado
         setMinhasVagas(response.data);
       } catch (error) {
         console.error("Erro ao buscar minhas vagas:", error);
@@ -46,19 +44,24 @@ const MeusAnuncios = () => {
   };
 
   return (
-    <div>
+    <div className="meus-anuncios-container">
       <h2>Minhas Vagas Anunciadas</h2>
-      <ul>
+      <ul className="vagas-list">
         {minhasVagas.length > 0 ? (
           minhasVagas.map((vaga) => (
-            <li key={vaga.id}>
-              <p>{vaga.funcao}</p>
-              <p>{vaga.descricao}</p>
-              <p>
-                Data Necessária:{" "}
-                {new Date(vaga.data_necessaria).toLocaleDateString()}
-              </p>
-              <button onClick={() => handleRemoverVaga(vaga.id)}>
+            <li key={vaga.id} className="vaga-card">
+              <div className="vaga-info">
+                <p className="vaga-funcao">{vaga.funcao}</p>
+                <p className="vaga-descricao">{vaga.descricao}</p>
+                <p className="vaga-data">
+                  Data Necessária:{" "}
+                  {new Date(vaga.data_necessaria).toLocaleDateString()}
+                </p>
+              </div>
+              <button
+                className="remover-vaga-button"
+                onClick={() => handleRemoverVaga(vaga.id)}
+              >
                 Remover Vaga
               </button>
             </li>
