@@ -2,6 +2,12 @@
 .vagas-container {
   max-width: 800px;
   margin: auto;
+  margin-bottom: 90px;
+}
+
+.vagas-container h2 {
+  color: white;
+  border: rgb(255, 255, 255) 2px solid;
 }
 
 .vagas-list {

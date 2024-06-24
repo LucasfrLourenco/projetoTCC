@@ -11,7 +11,8 @@ export const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem("token");
-    if (token) {
+    const storedUserId = localStorage.getItem("userId"); // Adicionar recuperação do userId do localStorage
+    if (token && storedUserId) {
       axios
         .get("http://localhost:3001/me", {
           headers: { Authorization: `Bearer ${token}` },
@@ -19,7 +20,7 @@ export const AuthProvider = ({ children }) => {
         .then((response) => {
           setIsAuthenticated(true);
           setUserType(response.data.tipo);
-          setUserId(response.data.userId); // Assume que o backend retorna userId
+          setUserId(storedUserId); // Usar o userId armazenado no localStorage
         })
         .catch(() => {
           setIsAuthenticated(false);
@@ -36,6 +37,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = (token, tipo, id) => {
     localStorage.setItem("token", token);
+    localStorage.setItem("userId", id); // Armazenar o userId no localStorage
     setIsAuthenticated(true);
     setUserType(tipo);
     setUserId(id);
@@ -43,6 +45,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userId"); // Remover o userId do localStorage
     setIsAuthenticated(false);
     setUserType(null);
     setUserId(null);
@@ -52,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     <AuthContext.Provider
       value={{ isAuthenticated, userType, userId, login, logout, loading }}
     >
-      {children}
+      {loading ? <div>Loading...</div> : children}
     </AuthContext.Provider>
   );
 };

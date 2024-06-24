@@ -332,14 +332,26 @@ app.get("/me", verificarToken, (req, res) => {
 
 // Rota para criar uma nova vaga
 app.post("/vagas", verificarToken, (req, res) => {
-  const { funcao, descricao, data_necessaria } = req.body;
+  const { funcao, descricao, data_inicial, data_final } = req.body;
   const empresa_id = req.userId;
 
+  const today = new Date().toISOString().split("T")[0];
+
+  if (data_inicial < today || data_final < today) {
+    return res.status(400).send("As datas devem ser de hoje em diante");
+  }
+
+  if (data_inicial > data_final) {
+    return res
+      .status(400)
+      .send("A data inicial não pode ser maior que a data final");
+  }
+
   const sql =
-    "INSERT INTO vagas (empresa_id, funcao, descricao, data_necessaria) VALUES (?, ?, ?, ?)";
+    "INSERT INTO vagas (empresa_id, funcao, descricao, data_inicial, data_final) VALUES (?, ?, ?, ?, ?)";
   db.query(
     sql,
-    [empresa_id, funcao, descricao, data_necessaria],
+    [empresa_id, funcao, descricao, data_inicial, data_final],
     (err, result) => {
       if (err) {
         console.error("Erro ao criar vaga:", err);
@@ -350,10 +362,14 @@ app.post("/vagas", verificarToken, (req, res) => {
   );
 });
 
-// Rota para obter todas as vagas
 app.get("/vagas", (req, res) => {
-  const sql =
-    "SELECT v.*, u.nome AS empresa_nome FROM vagas v JOIN usuarios u ON v.empresa_id = u.id";
+  const sql = `
+    SELECT v.*, u.nome AS empresa_nome, u.telefone AS empresa_telefone 
+    FROM vagas v 
+    JOIN usuarios u ON v.empresa_id = u.id
+    WHERE v.data_inicial IS NOT NULL AND v.data_final IS NOT NULL;
+  `;
+
   db.query(sql, (err, result) => {
     if (err) {
       console.error("Erro ao obter vagas:", err);
@@ -368,7 +384,13 @@ app.get("/vagas", (req, res) => {
 app.get("/vagas/meu-anuncio/:userId", (req, res) => {
   const userId = req.params.userId;
 
-  const sql = "SELECT * FROM vagas WHERE empresa_id = ?";
+  const sql = `
+    SELECT * 
+    FROM vagas 
+    WHERE empresa_id = ? 
+      AND data_inicial IS NOT NULL 
+      AND data_final IS NOT NULL;
+  `;
   db.query(sql, [userId], (err, result) => {
     if (err) {
       console.error("Erro ao buscar vagas do usuário:", err);

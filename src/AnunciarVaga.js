@@ -6,7 +6,8 @@ import "./AnunciarVaga.css";
 const AnunciarVaga = () => {
   const [funcao, setFuncao] = useState("");
   const [descricao, setDescricao] = useState("");
-  const [dataNecessaria, setDataNecessaria] = useState("");
+  const [dataInicial, setDataInicial] = useState("");
+  const [dataFinal, setDataFinal] = useState("");
   const { isAuthenticated, userType } = useContext(AuthContext);
 
   const handleSubmit = async (e) => {
@@ -17,13 +18,26 @@ const AnunciarVaga = () => {
       return;
     }
 
+    const today = new Date().toISOString().split("T")[0];
+
+    if (dataInicial < today || dataFinal < today) {
+      alert("As datas devem ser de hoje em diante");
+      return;
+    }
+
+    if (dataInicial > dataFinal) {
+      alert("A data inicial não pode ser maior que a data final");
+      return;
+    }
+
     try {
       await axios.post(
         "http://localhost:3001/vagas",
         {
           funcao,
           descricao,
-          data_necessaria: dataNecessaria,
+          data_inicial: dataInicial,
+          data_final: dataFinal,
         },
         {
           headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
@@ -32,7 +46,8 @@ const AnunciarVaga = () => {
       alert("Vaga anunciada com sucesso");
       setFuncao("");
       setDescricao("");
-      setDataNecessaria("");
+      setDataInicial("");
+      setDataFinal("");
     } catch (error) {
       console.error("Erro ao anunciar vaga:", error);
       alert("Erro ao anunciar vaga");
@@ -45,12 +60,21 @@ const AnunciarVaga = () => {
       <form onSubmit={handleSubmit}>
         <div>
           <label>Função:</label>
-          <input
-            type="text"
+          <select
             value={funcao}
             onChange={(e) => setFuncao(e.target.value)}
             required
-          />
+          >
+            <option value="">Selecione a Categoria</option>
+            <option value="Garçom">Garçom</option>
+            <option value="Cozinheiro">Cozinheiro</option>
+            <option value="Atendente">Atendente</option>
+            <option value="Chefe de Cozinha">Chefe de Cozinha</option>
+            <option value="Sushiman">Sushiman</option>
+            <option value="Pizzaiolo">Pizzaiolo</option>
+            <option value="Churrasqueiro">Churrasqueiro</option>
+            <option value="Auxiliar de Cozinha">Auxiliar de Cozinha</option>
+          </select>
         </div>
         <div>
           <label>Descrição:</label>
@@ -61,11 +85,20 @@ const AnunciarVaga = () => {
           ></textarea>
         </div>
         <div>
-          <label>Data Necessária:</label>
+          <label>Data Inicial:</label>
           <input
             type="date"
-            value={dataNecessaria}
-            onChange={(e) => setDataNecessaria(e.target.value)}
+            value={dataInicial}
+            onChange={(e) => setDataInicial(e.target.value)}
+            required
+          />
+        </div>
+        <div>
+          <label>Data Final:</label>
+          <input
+            type="date"
+            value={dataFinal}
+            onChange={(e) => setDataFinal(e.target.value)}
             required
           />
         </div>

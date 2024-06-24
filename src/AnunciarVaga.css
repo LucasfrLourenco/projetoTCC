@@ -2,6 +2,7 @@
 .anunciar-vaga-container {
   max-width: 600px;
   margin: auto;
+  margin-bottom: 100px;
   padding: 20px;
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -18,7 +19,8 @@
 }
 
 .anunciar-vaga-container input,
-.anunciar-vaga-container textarea {
+.anunciar-vaga-container textarea,
+select {
   width: 100%;
   padding: 8px;
   border: 1px solid #ccc;

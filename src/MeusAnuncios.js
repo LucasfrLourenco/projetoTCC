@@ -4,7 +4,7 @@ import { AuthContext } from "./AuthContext";
 import "./MeusAnuncios.css";
 
 const MeusAnuncios = () => {
-  const { userId, isAuthenticated } = useContext(AuthContext);
+  const { userId, isAuthenticated, loading } = useContext(AuthContext);
   const [minhasVagas, setMinhasVagas] = useState([]);
 
   useEffect(() => {
@@ -24,10 +24,10 @@ const MeusAnuncios = () => {
       }
     };
 
-    if (isAuthenticated && userId) {
+    if (!loading && isAuthenticated && userId) {
       fetchMinhasVagas();
     }
-  }, [userId, isAuthenticated]);
+  }, [userId, isAuthenticated, loading]);
 
   const handleRemoverVaga = async (vagaId) => {
     try {
@@ -54,8 +54,11 @@ const MeusAnuncios = () => {
                 <p className="vaga-funcao">{vaga.funcao}</p>
                 <p className="vaga-descricao">{vaga.descricao}</p>
                 <p className="vaga-data">
-                  Data Necessária:{" "}
-                  {new Date(vaga.data_necessaria).toLocaleDateString()}
+                  Data Inicial:{" "}
+                  {new Date(vaga.data_inicial).toLocaleDateString()}
+                </p>
+                <p className="vaga-data">
+                  Data Final: {new Date(vaga.data_final).toLocaleDateString()}
                 </p>
               </div>
               <button

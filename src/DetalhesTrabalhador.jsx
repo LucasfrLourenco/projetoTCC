@@ -82,6 +82,7 @@ const DetalhesTrabalhador = () => {
       <div className="detalhes-info">
         <h1 className="trabalhador-nome">{trabalhador.nome}</h1>
         <p className="trabalhador-idade">Idade: {trabalhador.idade} anos</p>
+        <p className="trabalhador-email">Email: {trabalhador.email}</p>
         <p className="trabalhador-telefone">
           Telefone: {trabalhador.telefone}
           {isAuthenticated && userType === "PJ" && (
