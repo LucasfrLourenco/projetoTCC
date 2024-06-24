@@ -147,7 +147,10 @@ const Perfil = () => {
                 <strong>Categoria:</strong> {categoria}
               </p>
               <p>
-                <strong>Disponível:</strong> {disponivel ? "Sim" : "Não"}
+                <strong>Disponível:</strong>{" "}
+                <span style={{ color: disponivel ? "green" : "red" }}>
+                  {disponivel ? "Sim" : "Não"}
+                </span>
               </p>
             </>
           )}

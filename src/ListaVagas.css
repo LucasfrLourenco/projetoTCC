@@ -7,7 +7,7 @@
 
 .vagas-container h2 {
   color: white;
-  border: rgb(255, 255, 255) 2px solid;
+  text-shadow: 4px 3px 3px black;
 }
 
 .vagas-list {
