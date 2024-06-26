@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import "./Cadastro.css";
+import "./global.css";
 
 const Cadastro = () => {
   const [tipo, setTipo] = useState("PJ");
